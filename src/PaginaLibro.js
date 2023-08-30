@@ -11,7 +11,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Image from 'react-bootstrap/Image';
 import "bootstrap/dist/css/bootstrap.min.css"
 
-function App() {
+function PaginaLibro() {
   return (
     <div className="App">
       <header>
@@ -75,4 +75,4 @@ function App() {
   );
 }
 
-export default App;
+export default PaginaLibro;
