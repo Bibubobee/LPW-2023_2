@@ -4,7 +4,13 @@ import './index.css';
 import Admin from './Admin';
 import SearchPage from './SearchPage';
 import App from './App';
+import PaginaLibro from './PaginaLibro';
+import Historial from './Historial';
 import reportWebVitals from './reportWebVitals';
+
+// Para ver la parte del Usuario 2 colocar en 
+// la parte de <Reac.StrictMode> </React.StrictMode>
+// <App />, y para el historial <Historial />
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const stateEnum = {User : 0, Librarian : 1, Admin: 2}
