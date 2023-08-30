@@ -21,8 +21,10 @@ else if (curr_state === stateEnum.Admin){
 
 root.render(
 	<React.StrictMode>
-		<App/>
-		{currPage}
+		<div class="bg-light">
+			<App/>
+			{currPage}
+		</div>
 	</React.StrictMode>
 );
 

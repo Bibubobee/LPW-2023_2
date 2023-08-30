@@ -4,7 +4,7 @@ function App() {
     return (
         <div className="SearchPage">
         <header className="SearchPage">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#!">BIBLIOTECA AMONG</a>
                     <form class="d-flex">
