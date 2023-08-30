@@ -2,7 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import Historial from './Historial';
 import reportWebVitals from './reportWebVitals';
+
+// Para ver la parte del Usuario 2 colocar en 
+// la parte de <Reac.StrictMode> </React.StrictMode>
+// <App />, y para el historial <Historial />
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
