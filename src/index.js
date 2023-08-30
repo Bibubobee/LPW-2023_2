@@ -6,6 +6,7 @@ import SearchPage from './SearchPage';
 import App from './App';
 import PaginaLibro from './PaginaLibro';
 import Historial from './Historial';
+import Login from "./Login"
 import reportWebVitals from './reportWebVitals';
 
 // Para ver la parte del Usuario 2 colocar en 
@@ -27,10 +28,11 @@ else if (curr_state === stateEnum.Admin){
 
 root.render(
 	<React.StrictMode>
-		<div class="bg-light">
+		{/* <div class="bg-light">
 			<App/>
 			{currPage}
-		</div>
+		</div> */}
+		<Login/>
 	</React.StrictMode>
 );
 
