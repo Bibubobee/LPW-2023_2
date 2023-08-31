@@ -2,8 +2,8 @@ import "./Login.css"
 
 function Login(){
     return(
-            <div>
-                <div class="row">
+        <div class="container">
+            <div class="row">
                 <div class="mx-auto col-10 col-md-8 col-lg-6">
                     <form class="form-example" action="" method="post">
                     <h1>Inicie Sesión</h1>
@@ -36,8 +36,8 @@ function Login(){
                     </button>
                     </form>
                 </div>
-                </div>
             </div>
+        </div>
     )
 }
 
