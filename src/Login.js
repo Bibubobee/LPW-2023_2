@@ -4,7 +4,7 @@ function Login(){
     return(
         <div class="container">
             <div class="row">
-                <div class="mx-auto col-10 col-md-8 col-lg-6">
+                <div class="mx-auto my-5 col-10 col-md-8 col-lg-6">
                     <form class="form-example" action="" method="post">
                     <h1>Inicie Sesión</h1>
                     <p class="description">
