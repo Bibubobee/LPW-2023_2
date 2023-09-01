@@ -19,7 +19,7 @@ function SearchPage(){
 function BookProduct(){
     return(
         <div class="col-lg-3 col-sm-12 col-md-6 mt-3">
-            <a class="card" href="#!" style={{"textDecoration": "None;"}}>                
+            <a class="card" href="#!" style={{"textDecoration": "None"}}>                
                 <div class="card-body bg-light">
                     <div class="text-center">
                         <h4 class="card-title font-weight-semibold">El Manifiesto Comunista</h4>
