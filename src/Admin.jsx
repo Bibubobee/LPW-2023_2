@@ -5,11 +5,11 @@ function Admin() {
                 <table class="table table-striped table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nombre persona</th>
-                            <th scope="col">Nombre Libro</th>
-                            <th scope="col">Tipo prestamo</th>
-                            <th scope="col">Tiempo restante</th>
+                            <th scope="col-md">#</th>
+                            <th scope="col-md">Nombre persona</th>
+                            <th scope="col-md">Nombre Libro</th>
+                            <th scope="col-md">Tipo prestamo</th>
+                            <th scope="col-md">Tiempo restante</th>
                         </tr>
                     </thead>
                     <tbody>

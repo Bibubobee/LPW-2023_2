@@ -2,14 +2,36 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Admin from './Admin';
+import SearchPage from './SearchPage';
 import App from './App';
+import PaginaLibro from './PaginaLibro';
+import Historial from './Historial';
+import Login from "./Login"
 import reportWebVitals from './reportWebVitals';
 
+// Para ver la parte del Usuario 2 colocar en 
+// la parte de <Reac.StrictMode> </React.StrictMode>
+// <App />, y para el historial <Historial />
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const stateEnum = {User : 0, Librarian : 1, Admin: 2}
+const curr_state = stateEnum.User
+
+let currPage
+
+if (curr_state === stateEnum.User){
+	currPage = <SearchPage />
+}
+else if (curr_state === stateEnum.Admin){
+	currPage = <Admin />
+}
+
 root.render(
 	<React.StrictMode>
-		<App/>
-		<Admin />
+		<div class="bg-light">
+			<App/>
+			{currPage}
+		</div>
 	</React.StrictMode>
 );
 
