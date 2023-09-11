@@ -7,6 +7,7 @@ import App from './App';
 import PaginaLibro from './PaginaLibro';
 import Historial from './Historial';
 import Login from "./Login"
+import BiblioBookview from "./BiblioBookview"
 import reportWebVitals from './reportWebVitals';
 
 // Para ver la parte del Usuario 2 colocar en 
@@ -25,7 +26,7 @@ if (curr_state === stateEnum.User){
 else if (curr_state === stateEnum.Admin){
 	currPage = <Admin />
 }
-
+currPage = <BiblioBookview />  //esta wea es pa dev de las paginas nomas, despues borrar
 root.render(
 	<React.StrictMode>
 		<div class="bg-light">
