@@ -1,6 +1,9 @@
 import "./SearchPage.css"
+import { Link } from 'react-router-dom';
+
 
 function SearchPage(){
+    const param = "parametros_magicos_para_despues"
     return (
         <body>
             <div> 
@@ -23,10 +26,12 @@ function SearchPage(){
                     </div>
                 </div>
             </div>
-
-                <div class="col-10 mx-auto">
+            <div class = "row g-3">
+                <div class="col-1"></div>
+                <div class="col-8 ">
                     <button type="submit" class="btn btn-success">Buscar</button>
                 </div>
+            </div>
             <div class="container">
                 <div class="row mt-5">
                     {BookProduct()}
@@ -43,21 +48,23 @@ function SearchPage(){
 }
 
 function BookProduct(){
+    const param = "parametros_magicos_para_despues"
     return(
+
         <div class="col-lg-3 col-sm-12 col-md-6 mt-3">
-            <a class="card" href="#!" style={{"textDecoration": "None"}}>                
-                <div class="card-body bg-light">
-                    <div class="text-center">
-                        <h4 class="card-title font-weight-semibold">El Manifiesto Comunista</h4>
-                        <div class="card-img-actions">
-                            <img src={require('./temp.jpg')} class="card-img img-fluid" width="100" height="150" alt=""/>
+            <a class="card" href={'/PaginaLibro#'+param}  style={{"textDecoration": "None;"}}>                
+                    <div class="card-body bg-light">
+                        <div class="text-center">
+                            <h4 class="card-title font-weight-semibold">El Manifiesto Comunista</h4>
+                            <div class="card-img-actions">
+                                <img src={require('./temp.jpg')} class="card-img img-fluid" width="100" height="150" alt=""/>
+                            </div>
+                        </div>
+                        <div class="text-left">
+                            <h6 class="text-muted mt-2">Autor: Karl Marx & Friedrich Engels</h6>
+                            <h6 class="text-muted">Stock: 10</h6>
                         </div>
                     </div>
-                    <div class="text-left">
-                        <h6 class="text-muted mt-2">Autor: Karl Marx & Friedrich Engels</h6>
-                        <h6 class="text-muted">Stock: 10</h6>
-                    </div>
-                </div>
             </a>
         </div>
     )
