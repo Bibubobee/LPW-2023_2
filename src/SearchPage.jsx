@@ -2,24 +2,50 @@ import "./SearchPage.css"
 
 function SearchPage(){
     return (
-        <div class="container">
-            <div class="row mt-5">
-                {BookProduct()}
-                {BookProduct()}
-                {BookProduct()}
-                {BookProduct()}
-                {BookProduct()}
-                {BookProduct()}
-                {BookProduct()}
+        <body>
+            <div> 
+                <div class="row g-3 pt-5">
+                    <div class="col-10 mx-auto">
+                        <div style={{height:80}}>
+                            <input type="text" class="form-control form-control-lg h-100" placeholder="Nombre del Libro"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 pt-3 pb-3">
+                    <div class="col-10 mx-auto">
+                        <label>Seleccionar Género</label>
+                        <select class="form-select">
+                            <option value="1">Cuento</option>
+                            <option value="2">Sci-Fi</option>
+                            <option value="3">Romance</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-        </div>
+
+                <div class="col-10 mx-auto">
+                    <button type="submit" class="btn btn-success">Buscar</button>
+                </div>
+            <div class="container">
+                <div class="row mt-5">
+                    {BookProduct()}
+                    {BookProduct()}
+                    {BookProduct()}
+                    {BookProduct()}
+                    {BookProduct()}
+                    {BookProduct()}
+                    {BookProduct()}
+                </div>
+            </div>
+        </body>
     );
 }
 
 function BookProduct(){
     return(
         <div class="col-lg-3 col-sm-12 col-md-6 mt-3">
-            <a class="card" href="#!" style={{"textDecoration": "None;"}}>                
+            <a class="card" href="#!" style={{"textDecoration": "None"}}>                
                 <div class="card-body bg-light">
                     <div class="text-center">
                         <h4 class="card-title font-weight-semibold">El Manifiesto Comunista</h4>
