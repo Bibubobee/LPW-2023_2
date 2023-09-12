@@ -12,6 +12,7 @@ import Image from 'react-bootstrap/Image';
 import "bootstrap/dist/css/bootstrap.min.css"
 
 function PaginaLibro() {
+  const param = "#super parametro para ver que lo devuelva a la pagina del libro"
   return (
     <div class="PaginaLibro">
       <main>
@@ -40,7 +41,7 @@ function PaginaLibro() {
                 Autor: Dan Brown
               </p>
               <div className='d-grid gap-2'>
-                <Button variant='primary' size='lg'>Pedir en Mesa</Button>
+                <Button variant='primary' size='lg' href = {"/Login" + param}>Pedir en Mesa</Button>
               </div>
             </Col>
           </Row>

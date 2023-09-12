@@ -1,6 +1,9 @@
 import "./SearchPage.css"
+import { Link } from 'react-router-dom';
+import TagSearch from './TagSearch'
 
 function SearchPage(){
+    const param = "parametros_magicos_para_despues"
     return (
         <body class="body">
             <div class="container"> 
@@ -16,17 +19,18 @@ function SearchPage(){
                     </div>
                 </div>
 
-                {/* <div class="row g-3 pt-3 pb-3">
-                    <div class="col-10 mx-auto">
-                        <label>Seleccionar Género</label>
-                        <select class="form-select">
-                            <option value="1">Cuento</option>
-                            <option value="2">Sci-Fi</option>
-                            <option value="3">Romance</option>
-                        </select>
+                <div class="row g-3 pt-3 pb-3">
+                    <div class="col-1 mx-auto">
+                        <h5>Seleccionar Género</h5>
+                        <TagSearch/>
                     </div>
-                </div> */}
-                <div class="row mt-5 mx-auto">
+                    <div class="col-1 mx-auto">
+                        <button type="submit" class="btn btn-success">Buscar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row mt-5">
                     {BookProduct()}
                     {BookProduct()}
                     {BookProduct()}
@@ -41,7 +45,9 @@ function SearchPage(){
 }
 
 function BookProduct(){
+    const param = "parametros_magicos_para_despues"
     return(
+
         <div class="col-lg-3 col-sm-12 col-md-6 mt-3">
             <a class="card" href="#!" style={{"textDecoration": "None"}}>   
                 <div class="text-center pb-3 pt-3">
