@@ -1,23 +1,14 @@
-.selected-tags {
-  display: flex;
-  flex-wrap: wrap;
-}
 
-.selected-tag {
-  background-color: #4CAF50; /* Color de fondo verde */
-  color: white; /* Texto en color blanco */
-  padding: 5px 10px; /* Espaciado interno */
-  margin: 5px; /* Margen entre tags */
-  border-radius: 5px; /* Bordes redondeados */
-  display: flex;
-  align-items: center;
+.custom-button {
+    background-color: #352f44 !important;
+    border-color: #352f44 !important;
+    color: white !important; 
 }
-
-.remove-tag {
-  cursor: pointer;
-  margin-left: 5px;
+.custom-dropdown-menu {
+    background-color: #B9B4c7 !important;
 }
-
-.remove-tag:hover {
-  text-decoration: underline;
+.custom-button:hover, .custom-button:active, .custom-button:visited {
+    background-color: #352f44 !important;
+    border-color: #352f44 !important;
+    color: white !important; 
 }

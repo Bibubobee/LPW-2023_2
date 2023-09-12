@@ -13,10 +13,6 @@ function SearchPage(){
                             <input type="text" class="form-control form-control-lg h-100" placeholder="Nombre del Libro"/>
                         </div>
                     </div>
-
-                    <div class="col-12 mx-auto pt-1">
-                        <button type="submit" class="btn btn-success">Buscar</button>
-                    </div>
                 </div>
 
                 <div class="row g-3 pt-3 pb-3">
@@ -49,7 +45,7 @@ function BookProduct(){
     return(
 
         <div class="col-lg-3 col-sm-12 col-md-6 mt-3">
-            <a class="card" href="#!" style={{"textDecoration": "None"}}>   
+            <a class="card" href={"/PaginaLibro#"+param} style={{"textDecoration": "None"}}>   
                 <div class="text-center pb-3 pt-3">
                     <img src={require('./temp.jpg')} class="card-image-top img-shadow" width="60%" height="auto" alt=""/>
                 </div>             
