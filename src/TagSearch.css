@@ -1,0 +1,23 @@
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.selected-tag {
+  background-color: #4CAF50; /* Color de fondo verde */
+  color: white; /* Texto en color blanco */
+  padding: 5px 10px; /* Espaciado interno */
+  margin: 5px; /* Margen entre tags */
+  border-radius: 5px; /* Bordes redondeados */
+  display: flex;
+  align-items: center;
+}
+
+.remove-tag {
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.remove-tag:hover {
+  text-decoration: underline;
+}
