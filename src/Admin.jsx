@@ -1,3 +1,5 @@
+// import './Admin.css';
+
 function Admin() {
     return (
         <div class = "container">
@@ -5,11 +7,11 @@ function Admin() {
                 <table class="table table-striped table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th scope="col-md">#</th>
-                            <th scope="col-md">Nombre persona</th>
-                            <th scope="col-md">Nombre Libro</th>
-                            <th scope="col-md">Tipo prestamo</th>
-                            <th scope="col-md">Tiempo restante</th>
+                            <th scope="col-md col-sm-1 d-flex justify-content-center">#</th>
+                            <th scope="col-md col-sm-2 d-flex justify-content-center">Nombre persona</th>
+                            <th scope="col-md col-sm-6 d-flex justify-content-center">Nombre Libro</th>
+                            <th scope="col-md col-sm-1 d-flex justify-content-center">Tipo prestamo</th>
+                            <th scope="col-md col-sm-2 d-flex justify-content-center">Tiempo restante</th>
                         </tr>
                     </thead>
                     <tbody>

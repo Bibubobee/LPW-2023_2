@@ -5,7 +5,6 @@ import TagSearch from './TagSearch'
 function SearchPage(){
     const param = "parametros_magicos_para_despues"
     return (
-        <body class="body">
             <div class="container"> 
                 <div class="row g-3 pt-5">
                     <div class="col-12 mx-auto">
@@ -24,9 +23,7 @@ function SearchPage(){
                         <button type="submit" class="btn btn-success">Buscar</button>
                     </div>
                 </div>
-            </div>
-            <div class="container">
-                <div class="row mt-5">
+                <div class="row g-5 mt-5">
                     {BookProduct()}
                     {BookProduct()}
                     {BookProduct()}
@@ -36,28 +33,23 @@ function SearchPage(){
                     {BookProduct()}
                 </div>
             </div>
-        </body>
     );
 }
 
 function BookProduct(){
     const param = "parametros_magicos_para_despues"
     return(
-
-        <div class="col-lg-3 col-sm-12 col-md-6 mt-3">
-            <a class="card" href={"/PaginaLibro#"+param} style={{"textDecoration": "None"}}>   
+        <div class="col-lg-3 col-sm-12 col-md-6 mt-5">
+            <a class="card card-sm" href={"/PaginaLibro#"+param} style={{"textDecoration": "None"}}>   
                 <div class="text-center pb-3 pt-3">
                     <img src={require('./temp.jpg')} class="card-image-top img-shadow" width="60%" height="auto" alt=""/>
                 </div>             
-                <div class="card-body">
+                <div class="card-body bg-dark">
                     <h5 class="text-center card-title fw-bold">El Manifiesto Comunista</h5>
                     <h6 class="text-center">Karl Marx & Friedrich Engels</h6>
-                    
-                    
-                    {/* <div class="text-left">
-                        <h6 class="text-muted mt-2">Autor: Karl Marx & Friedrich Engels</h6>
-                        <h6 class="text-muted">Stock: 10</h6>
-                    </div> */}
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-success">Pedir</button>
+                    </div>
                 </div>
             </a>
         </div>

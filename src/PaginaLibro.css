@@ -3,38 +3,37 @@
     box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
 }
 
-.form-control{
+/* .form-control{
     background-color: #352f44 !important;
     border-color: #B9B4c7 !important;
     border-radius: 0 !important;
     color: white !important;
-}
-.form-control::placeholder{
+} */
+/* .form-control::placeholder{
     color: white !important;
-}
+} */
 
 .card{
     border-radius: 0 !important;
     width: 90%;
 }
 
-.card-body{
+/* .card-body{
     background-color: #352f44;
     color: white !important;
-}
+} */
 
-.btn-success, .btn-success:hover, .btn-success:active, .btn-success:visited {
+/* .btn-success, .btn-success:hover, .btn-success:active, .btn-success:visited {
     background-color: #352f44 !important;
     border-color: #352f44 !important;
-}
+} */
 
 .img-shadow{
     box-shadow: 12px 8px 12px hsla(0deg, 0%, 0%, 0.5) !important;
 }
 
-.body{
+/* .body{
     background-color: #B9B4c7;
-    font: 'Roboto';
-}
+} */
 
 /* Colors #FAF0e6 #B9B4c7 #5c5470 #352f44 */
