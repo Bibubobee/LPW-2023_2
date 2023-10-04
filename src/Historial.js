@@ -13,47 +13,47 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 function Historial() {
   return (
-    <div className="App">
-      <header className='px-4 my-1'>
+    <div class="Historial">
+      <header class='px-4 my-1'>
         Historial de solicitudes
       </header>
       <main>
-        <Container>
-        <Row className='px-4 my-3'>
-            <Col sm={4}>
+        <div class="container">
+          <div class="row px-4 my-3">
+            <div class="col-sm-4">
               <p>Nombre</p>
-            </Col>
-            <Col sm={4}>
+            </div>
+            <div class="col-sm-4">
               <p>Libro</p>
-            </Col>
-            <Col sm={4}>
+            </div>
+            <div class="col-sm-4">
               <p>Estado</p>
-            </Col>
-          </Row>
-          <Row className='px-4 my-2 square border'>
-            <Col sm={4}>
+            </div>
+          </div>
+          <div class="row px-4 my-2 border">
+            <div class="col-sm-4">
               <p>Juan</p>
               <p>Carlos</p>
               <p>Marco</p>
-            </Col>
-            <Col sm={4}>
+            </div>
+            <div class="col-sm-4">
               <p>El Codigo DaVinci</p>
               <p>Manifiesto Comunista</p>
               <p>Los versos satánicos</p>
-            </Col>
-            <Col sm={4}>
+            </div>
+            <div class="col-sm-4">
               <p>
-                <Badge bg="primary">Entregado</Badge>
+                <span class="badge bg-primary">Entregado</span>
               </p>
               <p>
-                <Badge bg="warning">En espera</Badge>
+                <span class="badge bg-warning">En espera</span>
               </p>
               <p>
-                <Badge bg="danger">Atrasado</Badge>
+                <span class="badge bg-danger">Atrasado</span>
               </p>
-            </Col>
-          </Row>
-        </Container>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   );
