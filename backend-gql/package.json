@@ -1,0 +1,23 @@
+{
+  "name": "graphql-.proyecto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^3.12.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "graphql": "^16.8.1",
+    "graphql-server-express": "^1.4.1",
+    "graphql-tools": "^9.0.0",
+    "lodash": "^4.17.21",
+    "mongoose": "^7.6.3"
+  }
+}
