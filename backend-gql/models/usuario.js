@@ -5,7 +5,7 @@ const usuarioSchema = new mongoose.Schema({
 	nombre:String,
 	rut: String,
 	telefono: String, //no vamos a operar asi que mejor asi que como un int
-	foto: String
+	foto: String,
 
 });
 
