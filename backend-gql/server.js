@@ -13,6 +13,7 @@ const Usuario =require("./models/usuario");
 const Perfil =require("./models/perfil");
 const Libro =require("./models/libro");
 const Genero =require("./models/genero");
+const UsuarioPerfil =require("./models/usuarioPerfil")
 
 mongoose.connect("mongodb+srv://admin:admin1234@test.skpqw50.mongodb.net/iguano",{useNewUrlParser: true,useUnifiedTopology:true});
 
@@ -30,6 +31,11 @@ const typeDefs = gql`
 		id: ID!
 		tip: String!
 	}
+	type UsuarioPerfil{
+		id: ID!
+		usuario: String!
+		perfil: String!
+	} 
 	type Libro{
 		id: ID!
 		nombre: String!
@@ -55,12 +61,11 @@ const typeDefs = gql`
 		foto: String!
 	}
 	type PerfilInput{
-		nombre: String!
-		anno: Number!
-		copias: Number!
-		autor: String!
-		sinopsis: String!
-		foto: String!
+		tipo: String!
+	}
+	type UsuarioPerfilInput{
+		usuario: String!
+		perfil: String!
 	}
 	type LibroInput{
 		nombre: String!
@@ -78,6 +83,8 @@ const typeDefs = gql`
 		getUsuario(id: ID!) : Usuario 
 		getPerfiles : [Perfil]
 		getPerfil(id: ID!) : Perfil
+		getUsuarioPerfiles(idUsuario: ID!) : [UsuarioPerfil] 
+		getUsuarioPerfil(idUsuario: ID!, idPerfil: ID!) : UsuarioPerfil
 		getLibros : [Libro]
 		getLibro(id: ID!) : Libro
 		getGeneros : [Genero]
@@ -96,6 +103,9 @@ const typeDefs = gql`
 		addGenero(input: GeneroInput) : Genero
 		updateGenero(id: ID!, input: GeneroInput) : Genero
 		deleteGenero(id:ID!) : Alert
+		addUsuarioPerfil(input: UsuarioPerfilInput) : UsuarioPerfil
+		updateUsuarioPerfil(id: ID!, input: UsuarioPerfilInput) : UsuarioPerfil
+		deleteUsuarioPerfil(id:ID!) : Alert
 
 
 	}
@@ -108,7 +118,7 @@ const resolvers = {
 			return usuarios;
 		},
 		async getUsuario(obj, {id}){
-			const usuario = Usuario.findById(id);
+			const usuario = await Usuario.findById(id);
 			return usuario;
 		},
 		async getPerfiles(obj){
@@ -116,15 +126,23 @@ const resolvers = {
 			return perfiles;
 		},
 		async getPerfil(obj, {id}){
-			const perfil = Perfil.findById(id);
+			const perfil = await Perfil.findById(id);
 			return perfil;
+		},
+		async getUsuarioPerfiles(idUsuario){
+			const usuarioPerfil = await UsuarioPerfil.find({ usuario : idUsuario}).populate('usuario').populate('perfil');
+			return usuarioPerfil;
+		},
+		async getUsuarioPerfil(obj, {idUsuario, idPerfil}){
+			const usuarioPerfil = await Perfil.find({ usuario : idUsuario, perfil : idPerfil}).populate('usuario').populate('perfil');
+			return usuarioPerfil;
 		},
 		async getLibros(obj){
 			const libros = await Libro.find();
 			return libros;
 		},
 		async getlibro(obj, {id}){
-			const libro = Libro.findById(id);
+			const libro = await Libro.findById(id);
 			return libro;
 		},
 		async getGeneros(obj){
@@ -132,7 +150,7 @@ const resolvers = {
 			return generos;
 		},
 		async getGenero(obj, {id}){
-			const genero = Genero.findById(id);
+			const genero = await Genero.findById(id);
 			return genero;
 		},
 	},
