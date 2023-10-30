@@ -266,30 +266,30 @@ const resolvers = {
 			};
 		},
 		async addLibroGenero(obj, {input}){
-			let usuarioBus = Usuario.findById(input.usuario);
-			let perfilBus = Perfil.findById(input.perfil);
-			if (usuarioBus != null && perfilBus != null){
-				const usuarioPerfil = new UsuarioPerfil({ usuario: usuarioBus._id, perfil: perfilBus._id});
-				await usuarioPerfil.save();
-				return usuarioPerfil;	
+			let libroBus = Libro.findById(input.libro);
+			let generoBus = Genero.findById(input.genero);
+			if (libroBus != null && generoBus != null){
+				const libroGenero = new LibroGenero({ libro: libroBus._id, genero: generoBus._id});
+				await libroGenero.save();
+				return libroGenero;	
 			} else {
 				return null;
 			}
 		},
-		async updateUsuarioPerfil(obj, {id, input}){
-			let usuarioBus = Usuario.findById(input.usuario);
-			let perfilBus = Perfil.findById(input.perfil);
-			if (usuarioBus != null && perfilBus != null){
-				const usuarioPerfil = UsuarioPerfil.findByIdAndUpdate({ usuario: usuarioBus._id, perfil: perfilBus._id});
-				return usuarioPerfil;	
+		async updateLibroGenero(obj, {id, input}){
+			let libroBus = Libro.findById(input.libro);
+			let generoBus = Genero.findById(input.genero);
+			if (libroBus != null && generoBus != null){
+				const libroGenero = LibroGenero.findByIdAndUpdate({ libro: libroBus._id, genero: generoBus._id});
+				return libroGenero;	
 			} else {
 				return null;
 			}
 		},
-		async deleteUsuarioPerfil(obj, {id}){
-			await  UsuarioPerfil.deleteOne({_id: id});
+		async deleteLibroGenero(obj, {id}){
+			await  LibroGenero.deleteOne({_id: id});
 			return {
-				message: "usuario perfil eliminado",
+				message: "libro genero eliminado",
 			};
 		},
 	}

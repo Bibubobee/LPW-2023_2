@@ -4,4 +4,4 @@ const prestamoSchema = new mongoose.Schema({
     bibliotecario : { type : mongoose.Schema.Types.ObjectId, ref: 'Usuario'}
 });
 
-module.exports = moongose.model("prestamo", prestamoSchema);
+module.exports = mongoose.model("prestamo", prestamoSchema);
