@@ -13,7 +13,8 @@ const Usuario =require("./models/usuario");
 const Perfil =require("./models/perfil");
 const Libro =require("./models/libro");
 const Genero =require("./models/genero");
-const UsuarioPerfil =require("./models/usuarioPerfil")
+const UsuarioPerfil =require("./models/usuarioPerfil");
+const LibroGenero =require("./models/libroGenero");
 
 mongoose.connect("mongodb+srv://admin:admin1234@test.skpqw50.mongodb.net/iguano",{useNewUrlParser: true,useUnifiedTopology:true});
 
@@ -49,6 +50,11 @@ const typeDefs = gql`
 		id: ID!
 		nombre: String!
 	}
+	type LibroGenero{
+		id: ID!
+		libro: String!
+		genero: String!
+	}
 	type Alert{
 		message:String
 	}
@@ -78,17 +84,23 @@ const typeDefs = gql`
 	type GeneroInput{
 		nombre: String!
 	}
+	type LibroGeneroInput{
+		libro: String!
+		genero: String!
+	}
 	type Query{
 		getUsuarios : [Usuario]
-		getUsuario(id: ID!) : Usuario 
+		getUsuario(id: ID!) : Usuario
 		getPerfiles : [Perfil]
 		getPerfil(id: ID!) : Perfil
-		getUsuarioPerfiles(idUsuario: ID!) : [UsuarioPerfil] 
+		getUsuarioPerfiles(idUsuario: ID!) : [UsuarioPerfil]
 		getUsuarioPerfil(idUsuario: ID!, idPerfil: ID!) : UsuarioPerfil
 		getLibros : [Libro]
 		getLibro(id: ID!) : Libro
 		getGeneros : [Genero]
 		getGenero(id: ID!) : Genero
+		getLibroGeneros(idLibro: ID!) : [LibroGenero]
+		getLibroGenero(idLibro: ID!, idGenero: ID!) : LibroGenero
 	}
 	type Mutation{
 		addUsuario(input: UsuarioInput) : Usuario
@@ -106,6 +118,9 @@ const typeDefs = gql`
 		addUsuarioPerfil(input: UsuarioPerfilInput) : UsuarioPerfil
 		updateUsuarioPerfil(id: ID!, input: UsuarioPerfilInput) : UsuarioPerfil
 		deleteUsuarioPerfil(id:ID!) : Alert
+		addLibroGenero(input: LibroGeneroInput) : LibroGenero
+		updateLibroGenero(id: ID!, input: LibroGeneroInput) : LibroGenero
+		deleteLibroGenero(id:ID!) : Alert
 
 
 	}
@@ -134,7 +149,7 @@ const resolvers = {
 			return usuarioPerfil;
 		},
 		async getUsuarioPerfil(obj, {idUsuario, idPerfil}){
-			const usuarioPerfil = await Perfil.find({ usuario : idUsuario, perfil : idPerfil}).populate('usuario').populate('perfil');
+			const usuarioPerfil = await UsuarioPerfil.find({ usuario : idUsuario, perfil : idPerfil}).populate('usuario').populate('perfil');
 			return usuarioPerfil;
 		},
 		async getLibros(obj){
@@ -152,6 +167,14 @@ const resolvers = {
 		async getGenero(obj, {id}){
 			const genero = await Genero.findById(id);
 			return genero;
+		},
+		async getLibroGeneros(idLibro){
+			const libroGenero = await LibroGenero.find({ libro : idLibro}).populate('libro').populate('genero');
+			return libroGenero;
+		},
+		async getLibroGenero(obj, {idLibro, idGenero}){
+			const libroGenero = await LibroGenero.find({ libro : idLibro, genero : idGenero}).populate('libro').populate('genero');
+			return libroGenero;
 		},
 	},
 	Mutation:{
@@ -185,6 +208,33 @@ const resolvers = {
 				message: "perfil eliminado",
 			};
 		},
+		async addUsuarioPerfil(obj, {input}){
+			let usuarioBus = Usuario.findById(input.usuario);
+			let perfilBus = Perfil.findById(input.perfil);
+			if (usuarioBus != null && perfilBus != null){
+				const usuarioPerfil = new UsuarioPerfil({ usuario: usuarioBus._id, perfil: perfilBus._id});
+				await usuarioPerfil.save();
+				return usuarioPerfil;	
+			} else {
+				return null;
+			}
+		},
+		async updateUsuarioPerfil(obj, {id, input}){
+			let usuarioBus = Usuario.findById(input.usuario);
+			let perfilBus = Perfil.findById(input.perfil);
+			if (usuarioBus != null && perfilBus != null){
+				const usuarioPerfil = UsuarioPerfil.findByIdAndUpdate({ usuario: usuarioBus._id, perfil: perfilBus._id});
+				return usuarioPerfil;	
+			} else {
+				return null;
+			}
+		},
+		async deleteUsuarioPerfil(obj, {id}){
+			await  UsuarioPerfil.deleteOne({_id: id});
+			return {
+				message: "usuario perfil eliminado",
+			};
+		},
 		async addLibro(obj, {input}){
 			const libro = new Libro(input);
 			await libro.save();
@@ -213,6 +263,33 @@ const resolvers = {
 			await  Genero.deleteOne({_id: id});
 			return {
 				message: "genero eliminado",
+			};
+		},
+		async addLibroGenero(obj, {input}){
+			let usuarioBus = Usuario.findById(input.usuario);
+			let perfilBus = Perfil.findById(input.perfil);
+			if (usuarioBus != null && perfilBus != null){
+				const usuarioPerfil = new UsuarioPerfil({ usuario: usuarioBus._id, perfil: perfilBus._id});
+				await usuarioPerfil.save();
+				return usuarioPerfil;	
+			} else {
+				return null;
+			}
+		},
+		async updateUsuarioPerfil(obj, {id, input}){
+			let usuarioBus = Usuario.findById(input.usuario);
+			let perfilBus = Perfil.findById(input.perfil);
+			if (usuarioBus != null && perfilBus != null){
+				const usuarioPerfil = UsuarioPerfil.findByIdAndUpdate({ usuario: usuarioBus._id, perfil: perfilBus._id});
+				return usuarioPerfil;	
+			} else {
+				return null;
+			}
+		},
+		async deleteUsuarioPerfil(obj, {id}){
+			await  UsuarioPerfil.deleteOne({_id: id});
+			return {
+				message: "usuario perfil eliminado",
 			};
 		},
 	}
