@@ -5,4 +5,4 @@ const usuarioPerfilSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model("usuarioPerfil", usuarioPerfilSchema);
+module.exports = mongoose.model("UsuarioPerfil", usuarioPerfilSchema);

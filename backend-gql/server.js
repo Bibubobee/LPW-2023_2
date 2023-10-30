@@ -15,8 +15,9 @@ const Libro =require("./models/libro");
 const Genero =require("./models/genero");
 const UsuarioPerfil =require("./models/usuarioPerfil");
 const LibroGenero =require("./models/libroGenero");
+const { ObjectId } = require("mongodb");
 
-mongoose.connect("mongodb+srv://admin:admin1234@test.skpqw50.mongodb.net/iguano",{useNewUrlParser: true,useUnifiedTopology:true});
+mongoose.connect("mongodb+srv://admin:admin1234@cluster0.1qndxpt.mongodb.net/Iguano",{useNewUrlParser: true,useUnifiedTopology:true});
 
 const typeDefs = gql`
 	type Usuario{
@@ -30,18 +31,18 @@ const typeDefs = gql`
 	}
 	type Perfil{
 		id: ID!
-		tip: String!
+		tipo: String!
 	}
 	type UsuarioPerfil{
 		id: ID!
-		usuario: String!
-		perfil: String!
+		usuario: String
+		perfil: String
 	} 
 	type Libro{
 		id: ID!
 		nombre: String!
-		anno: Number!
-		copias: Number!
+		anno: Int!
+		copias: Int!
 		autor: String!
 		sinopsis: String!
 		foto: String!
@@ -52,8 +53,8 @@ const typeDefs = gql`
 	}
 	type LibroGenero{
 		id: ID!
-		libro: String!
-		genero: String!
+		libro: String
+		genero: String
 	}
 	type Alert{
 		message:String
@@ -66,25 +67,25 @@ const typeDefs = gql`
 		telefono: String!
 		foto: String!
 	}
-	type PerfilInput{
+	input PerfilInput{
 		tipo: String!
 	}
-	type UsuarioPerfilInput{
+	input UsuarioPerfilInput{
 		usuario: String!
 		perfil: String!
 	}
-	type LibroInput{
+	input LibroInput{
 		nombre: String!
-		anno: Number!
-		copias: Number!
+		anno: Int!
+		copias: Int!
 		autor: String!
 		sinopsis: String!
 		foto: String!
 	}
-	type GeneroInput{
+	input GeneroInput{
 		nombre: String!
 	}
-	type LibroGeneroInput{
+	input LibroGeneroInput{
 		libro: String!
 		genero: String!
 	}
@@ -144,8 +145,8 @@ const resolvers = {
 			const perfil = await Perfil.findById(id);
 			return perfil;
 		},
-		async getUsuarioPerfiles(idUsuario){
-			const usuarioPerfil = await UsuarioPerfil.find({ usuario : idUsuario}).populate('usuario').populate('perfil');
+		async getUsuarioPerfiles(obj, {idUsuario}){
+			const usuarioPerfil = await UsuarioPerfil.find({usuario : idUsuario}).populate('usuario');
 			return usuarioPerfil;
 		},
 		async getUsuarioPerfil(obj, {idUsuario, idPerfil}){
@@ -156,7 +157,7 @@ const resolvers = {
 			const libros = await Libro.find();
 			return libros;
 		},
-		async getlibro(obj, {id}){
+		async getLibro(obj, {id}){
 			const libro = await Libro.findById(id);
 			return libro;
 		},
@@ -209,8 +210,8 @@ const resolvers = {
 			};
 		},
 		async addUsuarioPerfil(obj, {input}){
-			let usuarioBus = Usuario.findById(input.usuario);
-			let perfilBus = Perfil.findById(input.perfil);
+			let usuarioBus = await Usuario.findById(input.usuario);
+			let perfilBus = await Perfil.findById(input.perfil);
 			if (usuarioBus != null && perfilBus != null){
 				const usuarioPerfil = new UsuarioPerfil({ usuario: usuarioBus._id, perfil: perfilBus._id});
 				await usuarioPerfil.save();
@@ -220,8 +221,8 @@ const resolvers = {
 			}
 		},
 		async updateUsuarioPerfil(obj, {id, input}){
-			let usuarioBus = Usuario.findById(input.usuario);
-			let perfilBus = Perfil.findById(input.perfil);
+			let usuarioBus = await Usuario.findById(input.usuario);
+			let perfilBus = await Perfil.findById(input.perfil);
 			if (usuarioBus != null && perfilBus != null){
 				const usuarioPerfil = UsuarioPerfil.findByIdAndUpdate({ usuario: usuarioBus._id, perfil: perfilBus._id});
 				return usuarioPerfil;	
@@ -266,8 +267,8 @@ const resolvers = {
 			};
 		},
 		async addLibroGenero(obj, {input}){
-			let libroBus = Libro.findById(input.libro);
-			let generoBus = Genero.findById(input.genero);
+			let libroBus = await Libro.findById(input.libro);
+			let generoBus = await Genero.findById(input.genero);
 			if (libroBus != null && generoBus != null){
 				const libroGenero = new LibroGenero({ libro: libroBus._id, genero: generoBus._id});
 				await libroGenero.save();
@@ -277,8 +278,8 @@ const resolvers = {
 			}
 		},
 		async updateLibroGenero(obj, {id, input}){
-			let libroBus = Libro.findById(input.libro);
-			let generoBus = Genero.findById(input.genero);
+			let libroBus = await Libro.findById(input.libro);
+			let generoBus = await Genero.findById(input.genero);
 			if (libroBus != null && generoBus != null){
 				const libroGenero = LibroGenero.findByIdAndUpdate({ libro: libroBus._id, genero: generoBus._id});
 				return libroGenero;	

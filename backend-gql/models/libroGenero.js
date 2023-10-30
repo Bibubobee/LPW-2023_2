@@ -5,4 +5,4 @@ const libroGeneroSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model("usuarioPerfil", libroGeneroSchema);
+module.exports = mongoose.model("LibroGenero", libroGeneroSchema);

@@ -4,4 +4,4 @@ const generoSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model("genero", generoSchema);
+module.exports = mongoose.model("Genero", generoSchema);
