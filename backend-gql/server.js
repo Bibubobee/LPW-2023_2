@@ -9,13 +9,19 @@ const {makeExcecutableSchema} = require("graphql-tools")
 const {merge} = require("lodash")
 const {ApolloServer, gql} = require("apollo-server-express");
 
-const Usuario =require("./models/usuario");
-const Perfil =require("./models/perfil");
-const Libro =require("./models/libro");
-const Genero =require("./models/genero");
-const UsuarioPerfil =require("./models/usuarioPerfil");
-const LibroGenero =require("./models/libroGenero");
+const Usuario = require("./models/usuario");
+const Perfil = require("./models/perfil");
+const Libro = require("./models/libro");
+const Genero = require("./models/genero");
+const UsuarioPerfil = require("./models/usuarioPerfil");
+const LibroGenero = require("./models/libroGenero");
+const Ejemplar = require("./models/ejemplar");
+const Compra = require("./models/compra");
+const Prestamo = require("./models/prestamo");
+const DetalleCompra = require("./models/detalleCompra");
+const DetallePrestamo = require("./models/detallePrestamo");
 const { ObjectId } = require("mongodb");
+const detalleCompra = require("./models/detalleCompra");
 
 mongoose.connect("mongodb+srv://admin:admin1234@cluster0.1qndxpt.mongodb.net/Iguano",{useNewUrlParser: true,useUnifiedTopology:true});
 
@@ -56,6 +62,36 @@ const typeDefs = gql`
 		libro: String
 		genero: String
 	}
+	type Ejemplar{
+		id: ID!
+		libro: Libro
+	}
+	type Compra{
+		id: ID!
+		bibliotecario: Usuario
+	}
+	type Prestamo{
+		id: ID!
+		usuario: Usuario
+		bibliotecario: Usuario
+	}
+	type DetalleCompra{
+		id: ID!
+		compra: String
+		fecha_compra: String!
+		precio: String!
+		ejemplar: String
+	}
+	type DetallePrestamo{
+		id: ID!
+		prestamo: String
+		fecha_pedido: String!
+		fecha_limite: String!
+		en_casa: Boolean!
+		direccion: String
+		fecha_devolucio: String!
+		ejemplar: String
+	}
 	type Alert{
 		message:String
 	}
@@ -89,6 +125,31 @@ const typeDefs = gql`
 		libro: String!
 		genero: String!
 	}
+	input EjemplarInput{
+		libro: String!
+	}
+	input CompraInput{
+		bibliotecario: String!
+	}
+	input PrestamoInput{
+		usuario: String!
+		bibliotecario: String!
+	}
+	input DetalleCompraInput{
+		compra: String!
+		fecha_compra: String!
+		precio: String!
+		ejemplar: String!
+	}
+	input DetallePrestamoInput{
+		prestamo: String!
+		fecha_pedido: String!
+		fecha_limite: String!
+		en_casa: Boolean!
+		direccion: String
+		fecha_devolucio: String!
+		ejemplar: String!
+	}
 	type Query{
 		getUsuarios : [Usuario]
 		getUsuario(id: ID!) : Usuario
@@ -102,6 +163,16 @@ const typeDefs = gql`
 		getGenero(id: ID!) : Genero
 		getLibroGeneros(idLibro: ID!) : [LibroGenero]
 		getLibroGenero(idLibro: ID!, idGenero: ID!) : LibroGenero
+		getEjemplares : [Ejemplar]
+		getEjemplar(id: ID!) : Ejemplar
+		getCompras : [Compra]
+		getCompra(id: ID!) : Compra
+		getPrestamos : [Prestamo]
+		getPrestamo(id: ID!) : Prestamo
+		getDetalleCompras(idCompra: ID!) : [DetalleCompra]
+		getDetalleCompra(idCompra: ID!, idEjemplar: ID!) : DetalleCompra
+		getDetallePrestamos(idPrestamo: ID!) : [DetallePrestamo]
+		getDetallePrestamo(idPrestamo: ID!, idEjemplar: ID!) : DetallePrestamo
 	}
 	type Mutation{
 		addUsuario(input: UsuarioInput) : Usuario
@@ -122,8 +193,21 @@ const typeDefs = gql`
 		addLibroGenero(input: LibroGeneroInput) : LibroGenero
 		updateLibroGenero(id: ID!, input: LibroGeneroInput) : LibroGenero
 		deleteLibroGenero(id:ID!) : Alert
-
-
+		addEjemplar(input: EjemplarInput) : Ejemplar
+		updateEjemplar(id: ID!, input: EjemplarInput) : Ejemplar
+		deleteEjemplar(id: ID!) : Alert
+		addCompra(input: CompraInput) : Compra
+		updateCompra(id: ID!, input: CompraInput) : Compra
+		deleteCompra(id: ID!) : Alert
+		addPrestamo(input: PrestamoInput) : Prestamo
+		updatePrestamo(id: ID!, input: PrestamoInput) : Prestamo
+		deletePrestamo(id: ID!) : Alert
+		addDetalleCompra(input: DetalleCompraInput) : DetalleCompra
+		updateDetalleCompra(id: ID!, input: DetalleCompraInput) : DetalleCompra
+		deleteDetalleCompra(id: ID!) : Alert
+		addDetallePrestamo(input: DetallePrestamoInput) : DetallePrestamo
+		updateDetallePrestamo(id: ID!, input: DetallePrestamoInput) : DetallePrestamo
+		deleteDetallePrestamo(id: ID!) : Alert
 	}
 `;
 
@@ -176,6 +260,42 @@ const resolvers = {
 		async getLibroGenero(obj, {idLibro, idGenero}){
 			const libroGenero = await LibroGenero.find({ libro : idLibro, genero : idGenero}).populate('libro').populate('genero');
 			return libroGenero;
+		},
+		async getEjemplares(obj){
+			const ejemplares = await Ejemplar.find();
+			return ejemplares;
+		},
+		async getEjemplar(obj, {id}){
+			const ejemplar = await Ejemplar.findById(id);
+			return ejemplar;
+		},
+		async getCompras(obj){
+			const compras = await Compra.find();
+			return compras;
+		},
+		async getCompra(obj, {id}) {
+			const compra = await Compra.findById(id);
+			return compra;
+		},
+		async getPrestamos(obj){
+			const prestamos = await Prestamo.find();
+			return prestamos;
+		},
+		async getDetalleCompras(obj, {idCompra}){
+			const detalleCompra = await DetalleCompra.find({compra : idCompra}).populate('compra');
+			return detalleCompra;
+		},
+		async getDetalleCompra(obj, {idCompra, idEjemplar}) {
+			const detalleCompra = await DetalleCompra.find({ compra : idCompra, ejemplar : idEjemplar}).populate('compra').populate('ejemplar');
+			return detalleCompra;
+		},
+		async getDetallePrestamos(obj, {idPrestamo}){
+			const detallePrestamo = await DetallePrestamo.find({prestamo : idPrestamo}).populate('prestamo');
+			return detallePrestamo;
+		},
+		async getDetallePrestamo(obj, {idPrestamo, idEjemplar}) {
+			const detallePrestamo = await DetallePrestamo.find({ prestamo : idPrestamo, ejemplar : idEjemplar}).populate('prestamo').populate('ejemplar');
+			return detallePrestamo;
 		},
 	},
 	Mutation:{
@@ -291,6 +411,105 @@ const resolvers = {
 			await  LibroGenero.deleteOne({_id: id});
 			return {
 				message: "libro genero eliminado",
+			};
+		},
+		async addEjemplar(obj, {input}){
+			const ejemplar = new Ejemplar(input);
+			await ejemplar.save();
+			return ejemplar;
+		},
+		async updateEjemplar(obj, {id, input}){
+			const ejemplar = await Ejemplar.findByIdAndUpdate(id, input);
+			return ejemplar;
+		},
+		async deleteEjemplar(obj, {id}){
+			await Ejemplar.deleteOne({_id: id});
+			return {
+				message: "ejemplar eliminado",
+			};
+		},
+		async addCompra(obj, {input}){
+			const compra = new Compra(input);
+			await compra.save();
+			return compra;
+		},
+		async updateCompra(obj, {id, input}){
+			const compra = await Compra.findByIdAndUpdate(id, input);
+			return compra;
+		},
+		async deleteCompra(obj, {id}){
+			await Compra.deleteOne({_id: id});
+			return {
+				message: "compra eliminada",
+			};
+		},
+		async addPrestamo(obj, {input}){
+			const prestamo = new Prestamo(input);
+			await prestamo.save();
+			return prestamo;
+		},
+		async updatePrestamo(obj, {id, input}){
+			const prestamo = await Prestamo.findByIdAndUpdate(id, input);
+			return prestamo;
+		},
+		async deletePrestamo(obj, {id}){
+			await Compra.deleteOne({_id: id});
+			return {
+				message: "prestamo eliminado",
+			};
+		},
+		async addDetalleCompra(obj, {input}){
+			let compraBus = await Compra.findById(input.compra);
+			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
+			if (compraBus != null && ejemplarBus != null){
+				const detalleCompra = new DetalleCompra({ compra: compraBus._id, ejemplar: ejemplarBus._id});
+				await detalleCompra.save();
+				return detalleCompra;
+			} else {
+				return null;
+			}
+		},
+		async updateDetalleCompra(obj, {id, input}){
+			let compraBus = await Compra.findById(input.compra);
+			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
+			if (compraBus != null && ejemplarBus != null){
+				const detalleCompra = DetalleCompra.findByIdAndUpdate({ compra: compraBus._id, ejemplar: ejemplarBus._id});
+				return detalleCompra;
+			} else {
+				return null;
+			}
+		},
+		async deleteDetalleCompra(obj, {id}){
+			await DetalleCompra.deleteOne({_id: id});
+			return {
+				message: "Detalle Compra eliminado",
+			};
+		},
+		async addDetallePrestamo(obj, {input}){
+			let prestamoBus = await Prestamo.findById(input.prestamo);
+			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
+			if (prestamoBus != null && ejemplarBus != null){
+				const detallePrestamo = new DetallePrestamo({ prestamo: prestamoBus._id, ejemplar: ejemplarBus._id});
+				await detallePrestamo.save();
+				return detallePrestamo;
+			} else {
+				return null;
+			}
+		},
+		async updateDetallePrestamo(obj, {id, input}){
+			let prestamoBus = await Prestamo.findById(input.prestamo);
+			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
+			if (prestamoBus != null && ejemplarBus != null){
+				const detallePrestamo = DetallePrestamo.findByIdAndUpdate({ compra: prestamoBus._id, ejemplar: ejemplarBus._id});
+				return detallePrestamo;
+			} else {
+				return null;
+			}
+		},
+		async deleteDetallePrestamo(obj, {id}){
+			await DetallePrestamo.deleteOne({_id: id});
+			return {
+				message: "Detalle Prestamo eliminado",
 			};
 		},
 	}
