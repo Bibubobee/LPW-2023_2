@@ -230,11 +230,13 @@ const resolvers = {
 			return perfil;
 		},
 		async getUsuarioPerfiles(obj, {idUsuario}){
-			const usuarioPerfil = await UsuarioPerfil.find({usuario : idUsuario}).populate('usuario');
+			const usuarioPerfil = await UsuarioPerfil.find({usuario : idUsuario}).populate("usuario perfil");
+			console.log(usuarioPerfil);
 			return usuarioPerfil;
 		},
 		async getUsuarioPerfil(obj, {idUsuario, idPerfil}){
-			const usuarioPerfil = await UsuarioPerfil.find({ usuario : idUsuario, perfil : idPerfil}).populate('usuario').populate('perfil');
+			const usuarioPerfil = await UsuarioPerfil.find({ usuario : idUsuario, perfil : idPerfil}).populate('usuario perfil');
+			console.log(usuarioPerfil)
 			return usuarioPerfil;
 		},
 		async getLibros(obj){
@@ -254,11 +256,13 @@ const resolvers = {
 			return genero;
 		},
 		async getLibroGeneros(idLibro){
-			const libroGenero = await LibroGenero.find({ libro : idLibro}).populate('libro').populate('genero');
+			const libroGenero = await LibroGenero.find({ libro : idLibro}).populate('libro genero');
+			console.log(libroGenero)
 			return libroGenero;
 		},
 		async getLibroGenero(obj, {idLibro, idGenero}){
-			const libroGenero = await LibroGenero.find({ libro : idLibro, genero : idGenero}).populate('libro').populate('genero');
+			const libroGenero = await LibroGenero.find({ libro : idLibro, genero : idGenero}).populate('libro genero');
+			console.log(libroGenero)
 			return libroGenero;
 		},
 		async getEjemplares(obj){
@@ -282,19 +286,23 @@ const resolvers = {
 			return prestamos;
 		},
 		async getDetalleCompras(obj, {idCompra}){
-			const detalleCompra = await DetalleCompra.find({compra : idCompra}).populate('compra');
+			const detalleCompra = await DetalleCompra.find({compra : idCompra}).populate('compra ejemplar');
+			console.log(detalleCompra)
 			return detalleCompra;
 		},
 		async getDetalleCompra(obj, {idCompra, idEjemplar}) {
-			const detalleCompra = await DetalleCompra.find({ compra : idCompra, ejemplar : idEjemplar}).populate('compra').populate('ejemplar');
+			const detalleCompra = await DetalleCompra.find({ compra : idCompra, ejemplar : idEjemplar}).populate('compra ejemplar');
+			console.log(detalleCompra)
 			return detalleCompra;
 		},
 		async getDetallePrestamos(obj, {idPrestamo}){
-			const detallePrestamo = await DetallePrestamo.find({prestamo : idPrestamo}).populate('prestamo');
+			const detallePrestamo = await DetallePrestamo.find({prestamo : idPrestamo}).populate('prestamo ejemplar');
+			console.log(detallePrestamo)
 			return detallePrestamo;
 		},
 		async getDetallePrestamo(obj, {idPrestamo, idEjemplar}) {
-			const detallePrestamo = await DetallePrestamo.find({ prestamo : idPrestamo, ejemplar : idEjemplar}).populate('prestamo').populate('ejemplar');
+			const detallePrestamo = await DetallePrestamo.find({ prestamo : idPrestamo, ejemplar : idEjemplar}).populate('prestamo ejemplar');
+			console.log(detallePrestamo)
 			return detallePrestamo;
 		},
 	},
@@ -344,7 +352,7 @@ const resolvers = {
 			let usuarioBus = await Usuario.findById(input.usuario);
 			let perfilBus = await Perfil.findById(input.perfil);
 			if (usuarioBus != null && perfilBus != null){
-				const usuarioPerfil = UsuarioPerfil.findByIdAndUpdate({ usuario: usuarioBus._id, perfil: perfilBus._id});
+				const usuarioPerfil = await UsuarioPerfil.findByIdAndUpdate(id, { usuario: usuarioBus._id, perfil: perfilBus._id});
 				return usuarioPerfil;	
 			} else {
 				return null;
@@ -401,7 +409,7 @@ const resolvers = {
 			let libroBus = await Libro.findById(input.libro);
 			let generoBus = await Genero.findById(input.genero);
 			if (libroBus != null && generoBus != null){
-				const libroGenero = LibroGenero.findByIdAndUpdate({ libro: libroBus._id, genero: generoBus._id});
+				const libroGenero = await LibroGenero.findByIdAndUpdate(id, { libro: libroBus._id, genero: generoBus._id});
 				return libroGenero;	
 			} else {
 				return null;
@@ -473,7 +481,7 @@ const resolvers = {
 			let compraBus = await Compra.findById(input.compra);
 			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
 			if (compraBus != null && ejemplarBus != null){
-				const detalleCompra = DetalleCompra.findByIdAndUpdate({ compra: compraBus._id, ejemplar: ejemplarBus._id});
+				const detalleCompra = await DetalleCompra.findByIdAndUpdate(id, { compra: compraBus._id, ejemplar: ejemplarBus._id});
 				return detalleCompra;
 			} else {
 				return null;
@@ -500,7 +508,7 @@ const resolvers = {
 			let prestamoBus = await Prestamo.findById(input.prestamo);
 			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
 			if (prestamoBus != null && ejemplarBus != null){
-				const detallePrestamo = DetallePrestamo.findByIdAndUpdate({ compra: prestamoBus._id, ejemplar: ejemplarBus._id});
+				const detallePrestamo = await DetallePrestamo.findByIdAndUpdate(id, { compra: prestamoBus._id, ejemplar: ejemplarBus._id});
 				return detallePrestamo;
 			} else {
 				return null;
