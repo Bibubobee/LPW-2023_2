@@ -1,45 +1,39 @@
-import logo from './logo.svg';
+import React from 'react';
 import './PaginaLibro.css';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import Image from 'react-bootstrap/Image';
-import "bootstrap/dist/css/bootstrap.min.css"
 
 function PaginaLibro() {
-  const param = "#super parametro para ver que lo devuelva a la pagina del libro"
+  const param = "#super parametro para ver que lo devuelva a la pagina del libro";
+
   return (
-    <div class="PaginaLibro">
+    <div className="PaginaLibro">
       <main>
-        <div class="container">
-          <div class="row px-4 my-5">
-            <div class="col-sm-7">
-              <img src="https://imagessl8.casadellibro.com/a/l/t7/28/9788408175728.jpg" 
-              class="img-fluid rounded"
-              width="350"
+        <div className="container">
+          <div className="row px-4 my-5">
+            <div className="col-sm-12 col-md-6 col-lg-7 mb-4">
+              <img
+                src="https://imagessl8.casadellibro.com/a/l/t7/28/9788408175728.jpg"
+                className="img-fluid rounded"
+                width="350"
+                alt="Book Cover"
               />
             </div>
-            <div class="col-sm-5">
-              <h1 class='fw-light'>El Codigo Da Vinci</h1>
-              <p class='my-5'> Sinopsis: Robert Langdon recibe una llamada en mitad de la noche: 
-              el conservador del museo del Louvre ha sido asesinado en extrañas circunstancias y junto a 
-              su cadáver ha aparecido un desconcertante mensaje cifrado. Al profundizar en la investigación, 
-              Langdon, experto en simbología, descubre que las pistas conducen a las obras de Leonardo Da Vinci…y que
-              están a la vista de todos, ocultas por el ingenio del pintor. 
+            <div className="col-sm-12 col-md-6 col-lg-5">
+              <h1 className="fw-light">El Codigo Da Vinci</h1>
+              <p className="my-3">
+                Sinopsis: Robert Langdon recibe una llamada en mitad de la noche:
+                el conservador del museo del Louvre ha sido asesinado en extrañas circunstancias y junto a
+                su cadáver ha aparecido un desconcertante mensaje cifrado. Al profundizar en la investigación,
+                Langdon, experto en simbología, descubre que las pistas conducen a las obras de Leonardo Da Vinci…
+                y que están a la vista de todos, ocultas por el ingenio del pintor.
               </p>
-              <p class='my-5'>
+              <p className="my-3">
                 Fecha de Publicación: 29-08-2017
               </p>
-              <p class='my-5'>
+              <p className="my-3">
                 Autor: Dan Brown
               </p>
-              <div class='d-grid gap-2'>
-                <a href={"/Login" + param} class="btn btn-primary btn-lg">Pedir en Mesa</a>
+              <div className="d-grid gap-2">
+                <a href={"/Login" + param} className="btn btn-primary btn-lg">Pedir en Mesa</a>
               </div>
             </div>
           </div>

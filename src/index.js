@@ -40,25 +40,41 @@ function SelectorComponent() {
   } else if (curr_state === stateEnum.Librarian) {
     route1 = <Route path="/" element={<SearchPage />} />;
     route2 = <Route path="/Historial" element={<Historial />} />;
-    buttonHist =<div class = "col-2 ">
-                    <button type="submit" class="btn btn-success" ><a href={'/Historial#'+param} className="btn btn-success">Historial notificaciones</a></button>
+    buttonHist = <div className="col-md-2 col-12 mt-2">
+                    <button type="submit" class="btn btn-success" >
+                      <a href={'/Historial#'+param} className="btn btn-success">Historial notificaciones</a>
+                    </button>
                 </div>
     route3 = <Route path="/PaginaLibro" element={<BiblioBookview />} />;
   } else if (curr_state === stateEnum.Admin) {
     route1 = <Route path="/" element={<Admin />} />;
   }
 
-  return (
+return (
     <React.StrictMode>
-      <div className="bg-light">
-        <App />
-        <div>
-          <h4>Seleccionar Tipo de usuario</h4>
-          <button class="btn btn-warning" onClick={() => handleSelect(0)}>Usuario</button>
-          <button class="btn btn-warning" onClick={() => handleSelect(1)}>Bibliotecario</button>
-          <button class="btn btn-warning" onClick={() => handleSelect(2)}>Admin</button>
+      <App/>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
+            <h4 className="mt-3">Seleccionar Tipo de usuario</h4>
+            <div className="btn-group mt-2">
+              <button className="btn btn-warning" onClick={() => handleSelect(0)}>
+                Usuario
+              </button>
+              <button className="btn btn-warning" onClick={() => handleSelect(1)}>
+                Bibliotecario
+              </button>
+              <button className="btn btn-warning" onClick={() => handleSelect(2)}>
+                Admin
+              </button>
+            </div>
+          </div>
         </div>
-        {buttonHist}
+        <div className="row mt-3">
+          <div className="col-md-12">
+            {buttonHist}
+          </div>
+        </div>
         <Router>
           <Routes>
             {route1}
@@ -71,7 +87,6 @@ function SelectorComponent() {
     </React.StrictMode>
   );
 }
-
 function NotFoundComponent() {
   return <h1>Page not found</h1>;
 }
