@@ -12,6 +12,8 @@ import Historial from './Historial';
 import Login from './Login';
 import BiblioBookview from './BiblioBookview';
 import reportWebVitals from './reportWebVitals';
+import UserManagment from './UserManagment';
+import AdminBookview from './AdminBookview'
 
 const stateEnum = { User: 0, Librarian: 1, Admin: 2 };
 
@@ -30,7 +32,7 @@ function SelectorComponent() {
     setCurrState(value);
   };
 
-  let route1, route2, route3, buttonHist;
+  let route1, route2, route3, route4,SpecialButton1, SpecialButton2;
   const param= "parametros_magicos_para_despues"
 
   if (curr_state === stateEnum.User) {
@@ -40,16 +42,25 @@ function SelectorComponent() {
   } else if (curr_state === stateEnum.Librarian) {
     route1 = <Route path="/" element={<SearchPage />} />;
     route2 = <Route path="/Historial" element={<Historial />} />;
-    buttonHist = <div className="col-md-2 col-12 mt-2">
-                    <button type="submit" class="btn btn-success" >
-                      <a href={'/Historial#'+param} className="btn btn-success">Historial notificaciones</a>
-                    </button>
-                </div>
     route3 = <Route path="/PaginaLibro" element={<BiblioBookview />} />;
+    SpecialButton1 =  <button type="submit" class="btn btn-success" >
+                        <a href={'/Historial'} className="btn btn-success">Historial notificaciones</a>
+                      </button>
   } else if (curr_state === stateEnum.Admin) {
-    route1 = <Route path="/" element={<Admin />} />;
+    route1 = <Route path="/" element={<SearchPage/>} />;
+    route2 = <Route path="/Admin" element={<Admin />} />;
+    route4 = <Route path="/UserManagment" element={<UserManagment />} />;
+    route3 = <Route path="/PaginaLibro" element={<AdminBookview />} />;
+    SpecialButton1 =  <button type="submit" class="btn btn-success" >
+                        <a href={'/Admin'} className="btn btn-success">Historial Peticiones</a>
+                      </button>
+    SpecialButton2 =  <button type="submit" class="btn btn-success" >
+                        <a href={'/UserManagment'} className="btn btn-success">Gestionar Usuarios</a>
+                      </button>
   }
-
+/*como se trabaja en codigo ya hecho los nombres no son los adecuados,
+admin.js -> pagina de peticiones
+*/
 return (
     <React.StrictMode>
       <App/>
@@ -71,15 +82,22 @@ return (
           </div>
         </div>
         <div className="row mt-3">
-          <div className="col-md-12">
-            {buttonHist}
+          <div className="col-md-4">
+            {SpecialButton1}
+          </div>
+          <div className="col-md-4">
+          </div>
+          <div className="col-md-4 d-flex justify-content-end">
+            {SpecialButton2}
           </div>
         </div>
+
         <Router>
           <Routes>
             {route1}
             {route2}
             {route3}
+            {route4}
             <Route path="*" element={<NotFoundComponent />} />
           </Routes>
         </Router>
