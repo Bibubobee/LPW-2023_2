@@ -1,14 +1,4 @@
-import logo from './logo.svg';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import Image from 'react-bootstrap/Image';
-import Badge from 'react-bootstrap/Badge';
+import DetalleModal from "./DetalleModal";
 import "bootstrap/dist/css/bootstrap.min.css"
 
 function Historial() {
@@ -19,38 +9,90 @@ function Historial() {
       </header>
       <main>
         <div class="container">
-          <div class="row px-4 my-3">
-            <div class="col-sm-4">
+          <div class="row px-4 my-3 border-bottom">
+            <div class="col-3 col-sm-3">
               <p>Nombre</p>
             </div>
-            <div class="col-sm-4">
+            <div class="col-3 col-sm-3">
               <p>Libro</p>
             </div>
-            <div class="col-sm-4">
+            <div class="col-3 col-sm-3">
               <p>Estado</p>
             </div>
+            <div class="col-3 col-sm-3">
+              <p>Detalles</p>
+            </div>
           </div>
-          <div class="row px-4 my-2 border">
-            <div class="col-sm-4">
+          <div class="row px-4 my-2 mt-4 border-bottom">
+            <div class="col-md-3">
               <p>Juan</p>
-              <p>Carlos</p>
-              <p>Marco</p>
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-3">
               <p>El Codigo DaVinci</p>
-              <p>Manifiesto Comunista</p>
-              <p>Los versos satánicos</p>
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-3 d-flex align-items-center">
               <p>
                 <span class="badge bg-primary">Entregado</span>
               </p>
+            </div>
+            <div class="col-md-3 d-flex align-items-center">
+              <DetalleModal 
+              id="Detalle1"
+              nombreUsuario="Juan" 
+              nombreLibro="El Codigo DaVinci" 
+              fechaPedido="01-01-2023" 
+              fechaLimite="08-01-2023" 
+              fechaEntrega="07-01-2023" 
+              tipoSolicitud="Entrega a domicilio" 
+              />
+            </div>
+          </div>
+          <div class="row px-4 my-2 mt-4 border-bottom">
+            <div class="col-md-3">
+              <p>Carlos</p>
+            </div>
+            <div class="col-md-3">
+              <p>Manifiesto Comunista</p>
+            </div>
+            <div class="col-md-3 d-flex align-items-center">
               <p>
-                <span class="badge bg-warning">En espera</span>
+                <span class="badge bg-warning">En Espera</span>
               </p>
+            </div>
+            <div class="col-md-3 d-flex align-items-center">
+              <DetalleModal
+              id="Detalle2" 
+              nombreUsuario="Carlos" 
+              nombreLibro="Manifiesto Comunista" 
+              fechaPedido="07-11-2023" 
+              fechaLimite="07-12-2023" 
+              fechaEntrega="X-X-X" 
+              tipoSolicitud="Prestamo" 
+              />
+            </div>
+          </div>
+          <div class="row px-4 my-2 mt-4 border-bottom">
+            <div class="col-md-3">
+              <p>Marco</p>
+            </div>
+            <div class="col-md-3">
+              <p>Los Versos Satánicos</p>
+            </div>
+            <div class="col-md-3 d-flex align-items-center">
               <p>
                 <span class="badge bg-danger">Atrasado</span>
               </p>
+            </div>
+            <div class="col-md-3 d-flex align-items-center">
+              <DetalleModal 
+              id="Detalle3"
+              nombreUsuario="Marco" 
+              nombreLibro="Los Versos Satánicos" 
+              fechaPedido="01-10-2023" 
+              fechaLimite="01-11-2023" 
+              fechaEntrega="X-X-X" 
+              tipoSolicitud="Prestamo" 
+              />
             </div>
           </div>
         </div>
