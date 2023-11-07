@@ -1,3 +1,20 @@
+/* App.css */
 .custom-navbar {
-  background-color: #5C5470; 
+  background-color: #5C5470;
+  transform: translateX(-20px);
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.5s; /* Define the transition effect */
+}
+
+.custom-navbar.loaded {
+  transform: translateX(0);
+  opacity: 1;
+}
+.logo-custom {
+  opacity: 0;
+  transition: opacity 0.7s;
+}
+
+.logo-custom.loaded {
+  opacity: 1;
 }
