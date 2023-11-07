@@ -4,17 +4,18 @@ function UserManagment() {
     return (
         <div class = "container">
             <div className="row mt-3">
-                <div className="col-md-4">
-                    <button className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#AddUser">
-                        Agregar Usuario
-                    </button>
+              <div className="row">
+                <div className="col-6 col-md-2 mb-3 mb-md-0">
+                  <button className="btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#AddUser">
+                    Agregar Usuario
+                  </button>
                 </div>
-                <div className="col-md-4"></div>
-                <div className="col-md-4 d-flex justify-content-end">
-                    <button className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#DelUser">
-                        Eliminar Usuario
-                    </button>
+                <div className="col-6 col-md-2 offset-md-8">
+                  <button className="btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#DelUser">
+                    Eliminar Usuario
+                  </button>
                 </div>
+              </div>
             </div>
             <div className ="row" style = {{margin:"5% auto"}}>
                 <div className="table-responsive">

@@ -34,19 +34,19 @@ function AdminBookview() {
               </div>
             </div>
           </div>
-          <div className="row px-4 my-5">
-            <div className="col-sm-4 d-grid gap-2">
-              <button className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#addcopy">
+          <div className="row px-4 my-5 justify-content-center">
+            <div className="col-12 col-md-3 mb-3 mb-md-0 d-grid gap-2">
+              <button className="btn btn-primary btn-md w-100" data-bs-toggle="modal" data-bs-target="#addcopy">
                 Agregar ejemplares 
               </button>
             </div>
-            <div className= "col-sm-4 d-grid gap-2">
-              <button className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#askforcopy">
-                  Pedir ejemplares a bodega
+            <div className="col-12 col-md-3 mb-3 mb-md-0 d-grid gap-2">
+              <button className="btn btn-primary btn-md w-100" data-bs-toggle="modal" data-bs-target="#askforcopy">
+                Pedir ejemplares a bodega
               </button>
             </div>
-            <div className="col-sm-4 d-grid gap-2">
-              <button className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#delcopy">
+            <div className="col-12 col-md-3 d-grid gap-2">
+              <button className="btn btn-primary btn-md w-100" data-bs-toggle="modal" data-bs-target="#delcopy">
                 Eliminar ejemplares
               </button>
             </div>

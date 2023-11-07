@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 function Historial() {
   return (
-    <div class="Historial">
+    <div >
       <header class='px-4 my-1'>
         Historial de solicitudes
       </header>

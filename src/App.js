@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaSearch } from 'react-icons/fa';
 import './App.css';
 
 function App() {
@@ -18,8 +19,8 @@ function App() {
     <div className="SearchPage">
       <header className="SearchPage">
         <nav className={`navbar navbar-expand-md navbar-dark custom-navbar ${navbarVisible ? 'loaded' : ''}`}>
-          <div className="container-fluid">
-            <a className="navbar-brand" href="/">
+          <div className="container d-flex justify-content-between align-items-center">
+            <a className="navbar-brand d-flex justify-content-between align-items-center" href="/" title='Ir a la página principal'>
               <img
                 src="/4 Imagotipo sin fondo.png"
                 alt="Your Logo"
@@ -27,12 +28,12 @@ function App() {
                 height="100"
                 className={`logo-custom ${logoVisible ? 'loaded' : ''}`}
               />
-              BIBLIOTECA IGUANO
+              <h3 style={{fontFamily: "Cursive"}}>BIBLIOTECA IGUANO</h3>
             </a>
             <form className="d-flex">
-              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-outline-success" type="submit">
-                Search
+              <input className="form-control me-2" type="search" placeholder="Busca tu libro" aria-label="Search" />
+              <button className="btn btn-outline-success" type="submit" title='Buscar'>
+                <FaSearch/>
               </button>
             </form>
           </div>

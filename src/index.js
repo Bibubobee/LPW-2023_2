@@ -92,15 +92,14 @@ return (
             </div>
           </div>
           <div className="row mt-3">
-            <div className="col-md-4">
+            <div className="col-6 d-flex justify-content-start">
               {SpecialButton1}
             </div>
-            <div className="col-md-4">
-            </div>
-            <div className="col-md-4 d-flex justify-content-end ">
+            <div className="col-6 d-flex justify-content-end">
               {SpecialButton2}
             </div>
           </div>
+
 
           <Router>
             <Routes>

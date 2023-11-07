@@ -2,8 +2,8 @@ import React from 'react';
 
 function DetalleModal({ id, nombreUsuario, nombreLibro, fechaPedido, fechaLimite, fechaEntrega, tipoSolicitud }) {
   return (
-    <div class="d-flex" >
-      <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target={"#"+id} >
+    <div>
+      <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target={"#"+id}  >
         Ver detalles
       </button>
       <div class="modal fade" tabIndex="-1" id = {id}>

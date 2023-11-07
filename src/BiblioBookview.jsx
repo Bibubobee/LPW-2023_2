@@ -20,7 +20,7 @@ function BiblioBookview() {
               <div onClick={() => setOpenSinopsis(!openSinopsis)} aria-controls="example-collapse-text" aria-expanded={openSinopsis} className="my-3" style={{cursor: 'pointer', borderTop: '1px solid #000', borderBottom: '1px solid #000', padding: '10px 0'}}>
                 <div className="row align-items-center">
                   <div className="col-10 col-sm-11">
-                    <p style={{fontWeight: 'bold', marginBottom: '0'}}>Sinopsis:</p>
+                    <p style={{fontWeight: 'bold', marginBottom: '0'}}>Rese&ntilde;a</p>
                   </div>
                   <div className="col-2 col-sm-1">
                     <FaAngleDown />
