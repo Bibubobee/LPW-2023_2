@@ -24,18 +24,18 @@ function Historial() {
             </div>
           </div>
           <div class="row px-4 my-2 mt-4 border-bottom">
-            <div class="col-md-3">
+            <div class="col-3 col-sm-3">
               <p>Juan</p>
             </div>
-            <div class="col-md-3">
+            <div class="col-3 col-sm-3">
               <p>El Codigo DaVinci</p>
             </div>
-            <div class="col-md-3 d-flex align-items-center">
+            <div class="col-3 col-sm-3 d-flex align-items-center">
               <p>
                 <span class="badge bg-primary">Entregado</span>
               </p>
             </div>
-            <div class="col-md-3 d-flex align-items-center">
+            <div class="col-3 col-sm-3 d-flex align-items-center">
               <DetalleModal 
               id="Detalle1"
               nombreUsuario="Juan" 
@@ -48,18 +48,18 @@ function Historial() {
             </div>
           </div>
           <div class="row px-4 my-2 mt-4 border-bottom">
-            <div class="col-md-3">
+            <div class="col-3 col-sm-3">
               <p>Carlos</p>
             </div>
-            <div class="col-md-3">
+            <div class="col-3 col-sm-3">
               <p>Manifiesto Comunista</p>
             </div>
-            <div class="col-md-3 d-flex align-items-center">
+            <div class="col-3 col-sm-3 d-flex align-items-center">
               <p>
                 <span class="badge bg-warning">En Espera</span>
               </p>
             </div>
-            <div class="col-md-3 d-flex align-items-center">
+            <div class="col-3 col-sm-3 d-flex align-items-center">
               <DetalleModal
               id="Detalle2" 
               nombreUsuario="Carlos" 
@@ -72,18 +72,18 @@ function Historial() {
             </div>
           </div>
           <div class="row px-4 my-2 mt-4 border-bottom">
-            <div class="col-md-3">
+            <div class="col-3 col-sm-3">
               <p>Marco</p>
             </div>
-            <div class="col-md-3">
+            <div class="col-3 col-sm-3">
               <p>Los Versos Satánicos</p>
             </div>
-            <div class="col-md-3 d-flex align-items-center">
+            <div class="col-3 col-sm-3 d-flex align-items-center">
               <p>
                 <span class="badge bg-danger">Atrasado</span>
               </p>
             </div>
-            <div class="col-md-3 d-flex align-items-center">
+            <div class="col-3 col-sm-3 d-flex align-items-center">
               <DetalleModal 
               id="Detalle3"
               nombreUsuario="Marco" 
