@@ -16,27 +16,35 @@ function UserManagment() {
                     </button>
                 </div>
             </div>
-            <div class ="row" style = {{margin:"5% auto"}}>
-                <table class="table table-striped table-hover table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col-md col-sm-1 d-flex justify-content-center">#</th>
-                            <th scope="col-md col-sm-2 d-flex justify-content-center">Nombre persona</th>
-                            <th scope="col-md col-sm-6 d-flex justify-content-center">Correo Electronico</th>
-                            <th scope="col-md col-sm-1 d-flex justify-content-center">Rut</th>
-                            <th scope="col-md col-sm-2 d-flex justify-content-center">Telefono</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Pepe</td>
-                            <td>pepe@uncorreoreal.com</td>
-                            <td>12345678-9</td>
-                            <td>+569 12345678</td>
-                        </tr>
-                    </tbody> 
-                </table>
+            <div className ="row" style = {{margin:"5% auto"}}>
+                <div className="table-responsive">
+                    <table className="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col-md col-sm-1 d-flex justify-content-center">#</th>
+                                <th scope="col-md col-sm-2 d-flex justify-content-center">
+                                    Nombre persona
+                                </th>
+                                <th scope="col-md col-sm-6 d-flex justify-content-center">
+                                    Correo Electronico
+                                </th>
+                                <th scope="col-md col-sm-1 d-flex justify-content-center">Rut</th>
+                                <th scope="col-md col-sm-2 d-flex justify-content-center">
+                                    Telefono
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Pepe</td>
+                                <td>pepe@uncorreoreal.com</td>
+                                <td>12345678-9</td>
+                                <td>+569 12345678</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
           <div className="modal fade" tabIndex="-1" id = "AddUser">
             <div className="modal-dialog">

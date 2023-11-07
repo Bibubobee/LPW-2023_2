@@ -19,6 +19,15 @@ const stateEnum = { User: 0, Librarian: 1, Admin: 2 };
 
 
 function SelectorComponent() {
+  const [contentVisible, setContentVisible] = useState(false);
+
+  useEffect(() => {
+    console.log(contentVisible)
+    const timeout = setTimeout(() => {
+      setContentVisible(true);
+    }, 100); // Adjust the delay as needed
+    return () => clearTimeout(timeout);
+  });
  	const [curr_state, setCurrState] = useState(() => {
     const storedState = localStorage.getItem('userState');
     return storedState ? parseInt(storedState, 10) : stateEnum.Librarian;
@@ -51,10 +60,10 @@ function SelectorComponent() {
     route2 = <Route path="/Admin" element={<Admin />} />;
     route4 = <Route path="/UserManagment" element={<UserManagment />} />;
     route3 = <Route path="/PaginaLibro" element={<AdminBookview />} />;
-    SpecialButton1 =  <button type="submit" class="btn btn-success" >
+    SpecialButton1 =  <button type="submit" className="btn btn-success" >
                         <a href={'/Admin'} className="btn btn-success">Historial Peticiones</a>
                       </button>
-    SpecialButton2 =  <button type="submit" class="btn btn-success" >
+    SpecialButton2 =  <button type="submit" className="btn btn-success" >
                         <a href={'/UserManagment'} className="btn btn-success">Gestionar Usuarios</a>
                       </button>
   }
@@ -64,43 +73,45 @@ admin.js -> pagina de peticiones
 return (
     <React.StrictMode>
       <App/>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12">
-            <h4 className="mt-3">Seleccionar Tipo de usuario</h4>
-            <div className="btn-group mt-2">
-              <button className="btn btn-warning" onClick={() => handleSelect(0)}>
-                Usuario
-              </button>
-              <button className="btn btn-warning" onClick={() => handleSelect(1)}>
-                Bibliotecario
-              </button>
-              <button className="btn btn-warning" onClick={() => handleSelect(2)}>
-                Admin
-              </button>
+      <div className={`custom-container ${contentVisible ? 'loaded' : ''}`}>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              <h4 className="mt-3">Seleccionar Tipo de usuario</h4>
+              <div className="btn-group mt-2">
+                <button className="btn btn-warning" onClick={() => handleSelect(0)}>
+                  Usuario
+                </button>
+                <button className="btn btn-warning" onClick={() => handleSelect(1)}>
+                  Bibliotecario
+                </button>
+                <button className="btn btn-warning" onClick={() => handleSelect(2)}>
+                  Admin
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="row mt-3">
-          <div className="col-md-4">
-            {SpecialButton1}
+          <div className="row mt-3">
+            <div className="col-md-4">
+              {SpecialButton1}
+            </div>
+            <div className="col-md-4">
+            </div>
+            <div className="col-md-4 d-flex justify-content-end ">
+              {SpecialButton2}
+            </div>
           </div>
-          <div className="col-md-4">
-          </div>
-          <div className="col-md-4 d-flex justify-content-end">
-            {SpecialButton2}
-          </div>
-        </div>
 
-        <Router>
-          <Routes>
-            {route1}
-            {route2}
-            {route3}
-            {route4}
-            <Route path="*" element={<NotFoundComponent />} />
-          </Routes>
-        </Router>
+          <Router>
+            <Routes>
+              {route1}
+              {route2}
+              {route3}
+              {route4}
+              <Route path="*" element={<NotFoundComponent />} />
+            </Routes>
+          </Router>
+        </div>
       </div>
     </React.StrictMode>
   );

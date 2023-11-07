@@ -1,11 +1,22 @@
 import "./SearchPage.css";
 import { Link } from 'react-router-dom';
 import TagSearch from './TagSearch';
+import React, { useEffect, useState } from 'react';
 
 function SearchPage() {
   const param = "parametros_magicos_para_despues";
+  const [contentVisible, setContentVisible] = useState(false);
+
+  useEffect(() => {
+    console.log(contentVisible)
+    const timeout = setTimeout(() => {
+      setContentVisible(true);
+    }, 100); // Adjust the delay as needed
+    return () => clearTimeout(timeout);
+  });
+
   return (
-    <div className="container">
+    <div className={`custom-container ${contentVisible ? 'loaded' : ''}`}>
       <div className="row g-3 pt-5">
         <div className="col-12 mx-auto">
           <div style={{ height: 80 }}>
