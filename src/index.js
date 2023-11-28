@@ -14,6 +14,7 @@ import BiblioBookview from './BiblioBookview';
 import reportWebVitals from './reportWebVitals';
 import UserManagment from './UserManagment';
 import AdminBookview from './AdminBookview'
+import AddBook from './AddBook';
 
 const stateEnum = { User: 0, Librarian: 1, Admin: 2 };
 
@@ -52,9 +53,13 @@ function SelectorComponent() {
     route1 = <Route path="/" element={<SearchPage />} />;
     route2 = <Route path="/Historial" element={<Historial />} />;
     route3 = <Route path="/PaginaLibro" element={<BiblioBookview />} />;
+	route4 = <Route path="/AgregarLibro" element={<AddBook />} />;
     SpecialButton1 =  <button type="submit" class="btn btn-success" >
                         <a href={'/Historial'} className="btn btn-success">Historial notificaciones</a>
                       </button>
+	SpecialButton2 =  <button type="submit" class="btn btn-success" >
+					  <a href={'/AgregarLibro'} className="btn btn-success">Agregar Libros</a>
+					</button>
   } else if (curr_state === stateEnum.Admin) {
     route1 = <Route path="/" element={<SearchPage/>} />;
     route2 = <Route path="/Admin" element={<Admin />} />;
