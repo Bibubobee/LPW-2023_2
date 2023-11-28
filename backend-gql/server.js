@@ -41,8 +41,8 @@ const typeDefs = gql`
 	}
 	type UsuarioPerfil{
 		id: ID!
-		usuario: String
-		perfil: String
+		usuario: Usuario
+		perfil: Perfil
 	} 
 	type Libro{
 		id: ID!
@@ -59,8 +59,8 @@ const typeDefs = gql`
 	}
 	type LibroGenero{
 		id: ID!
-		libro: String
-		genero: String
+		libro: Libro
+		genero: Genero
 	}
 	type Ejemplar{
 		id: ID!
@@ -77,20 +77,20 @@ const typeDefs = gql`
 	}
 	type DetalleCompra{
 		id: ID!
-		compra: String
+		compra: Compra
 		fecha_compra: String!
 		precio: String!
-		ejemplar: String
+		ejemplar: Ejemplar
 	}
 	type DetallePrestamo{
 		id: ID!
-		prestamo: String
+		prestamo: Prestamo
 		fecha_pedido: String!
 		fecha_limite: String!
 		en_casa: Boolean!
 		direccion: String
 		fecha_devolucio: String!
-		ejemplar: String
+		ejemplar: Ejemplar
 	}
 	type Alert{
 		message:String
@@ -231,12 +231,10 @@ const resolvers = {
 		},
 		async getUsuarioPerfiles(obj, {idUsuario}){
 			const usuarioPerfil = await UsuarioPerfil.find({usuario : idUsuario}).populate("usuario perfil");
-			console.log(usuarioPerfil);
 			return usuarioPerfil;
 		},
 		async getUsuarioPerfil(obj, {idUsuario, idPerfil}){
 			const usuarioPerfil = await UsuarioPerfil.find({ usuario : idUsuario, perfil : idPerfil}).populate('usuario perfil');
-			console.log(usuarioPerfil)
 			return usuarioPerfil;
 		},
 		async getLibros(obj){
@@ -257,12 +255,10 @@ const resolvers = {
 		},
 		async getLibroGeneros(idLibro){
 			const libroGenero = await LibroGenero.find({ libro : idLibro}).populate('libro genero');
-			console.log(libroGenero)
 			return libroGenero;
 		},
 		async getLibroGenero(obj, {idLibro, idGenero}){
 			const libroGenero = await LibroGenero.find({ libro : idLibro, genero : idGenero}).populate('libro genero');
-			console.log(libroGenero)
 			return libroGenero;
 		},
 		async getEjemplares(obj){
@@ -287,22 +283,18 @@ const resolvers = {
 		},
 		async getDetalleCompras(obj, {idCompra}){
 			const detalleCompra = await DetalleCompra.find({compra : idCompra}).populate('compra ejemplar');
-			console.log(detalleCompra)
 			return detalleCompra;
 		},
 		async getDetalleCompra(obj, {idCompra, idEjemplar}) {
 			const detalleCompra = await DetalleCompra.find({ compra : idCompra, ejemplar : idEjemplar}).populate('compra ejemplar');
-			console.log(detalleCompra)
 			return detalleCompra;
 		},
 		async getDetallePrestamos(obj, {idPrestamo}){
 			const detallePrestamo = await DetallePrestamo.find({prestamo : idPrestamo}).populate('prestamo ejemplar');
-			console.log(detallePrestamo)
 			return detallePrestamo;
 		},
 		async getDetallePrestamo(obj, {idPrestamo, idEjemplar}) {
 			const detallePrestamo = await DetallePrestamo.find({ prestamo : idPrestamo, ejemplar : idEjemplar}).populate('prestamo ejemplar');
-			console.log(detallePrestamo)
 			return detallePrestamo;
 		},
 	},
