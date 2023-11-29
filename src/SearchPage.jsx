@@ -2,12 +2,37 @@ import "./SearchPage.css";
 import { Link } from 'react-router-dom';
 import TagSearch from './TagSearch';
 import React, { useEffect, useState } from 'react';
+import axios from "axios";
+
+const getBooks = async () => {
+	const query = `
+		query myQuery {
+			getLibros{
+				id
+				nombre
+				foto
+				autor
+				copias
+			}
+		}
+	`;
+	try {
+		const response = await axios.post("http://localhost:8080/graphql", {query});
+		return response.data.data.getLibros;
+	} catch (error) {
+		console.error("Error al obtener libros", error);
+		throw error;
+	}
+}
 
 function SearchPage() {
-	const param = "parametros_magicos_para_despues";
 	const [contentVisible, setContentVisible] = useState(false);
+	const [libros, setLibros] = useState([]);
 
 	useEffect(() => {
+		getBooks()
+			.then(data => setLibros(data));
+		
 		console.log(contentVisible)
 		const timeout = setTimeout(() => {
 		setContentVisible(true);
@@ -31,42 +56,40 @@ function SearchPage() {
 
 		<div className="row g-3 pt-3 pb-3">
 			<div className="col-6 col-md-6 col-lg-6">
-			<h5>Seleccionar Género</h5>
-			<TagSearch />
+				<h5>Seleccionar Género</h5>
+				<TagSearch />
 			</div>
-		<div className="col-6 col-md-6 col-lg-6 d-flex justify-content-end">
-			<button style={{ height: 60}} type="submit" className="btn btn-success">
-			Buscar
-			</button>
-		</div>
+			<div className="col-6 col-md-6 col-lg-6 d-flex justify-content-end">
+				<button style={{ height: 60}} type="submit" className="btn btn-success">
+				Buscar
+				</button>
+			</div>
 		</div>
 		<div className="row mt-5 d-flex justify-content-sm-center justify-content-lg-between">
-			{BookProduct()}
-			{BookProduct()}
-			{BookProduct()}
-			{BookProduct()}
-			{BookProduct()}
-			{BookProduct()}
-			{BookProduct()}
-			{BookProduct()}
+			{ 
+				libros.map(libro => (
+				<BookProduct nombre={libro.nombre} autor={libro.autor} copias={libro.copias} foto={libro.foto}/>
+				))
+			}
 		</div>
 		</div>
 	);
 }
 
-function BookProduct() {
-	const param = "parametros_magicos_para_despues";
+function BookProduct( {nombre, autor, copias, foto} ) {
+	const enable_btn = copias === 0;
+	
 	return (
 		<div className="col-lg-3 col-md-4 col-sm-6 mt-5" style={{width: "250px", height: "400px"}}>
-		<a className="card card-sm" href={"/PaginaLibro#" + param} style={{ textDecoration: "none" }} title="El Manifiesto Comunista">
+		<a className="card card-sm" href={"/PaginaLibro#" + nombre} style={{ textDecoration: "none" }} title={nombre}>
 			<div className="text-center pb-3 pt-3">
-			<img src={require('./temp.jpg')} className="card-image-top img-shadow" width="60%" height="auto" alt="" />
+			<img src={foto + ".jpg"} className="card-image-top img-shadow" width="60%" height="auto" alt="" />
 			</div>
 			<div className="card-body bg-dark">
-			<h5 className="text-center card-title fw-bold">El Manifiesto Comunista</h5>
-			<h6 className="text-center">Karl Marx & Friedrich Engels</h6>
+			<h5 className="text-center card-title fw-bold">{nombre}</h5>
+			<h6 className="text-center">{autor}</h6>
 			<div className="d-flex justify-content-center">
-				<button type="submit" className="btn btn-success" >
+				<button type="submit" className="btn btn-success" disabled={enable_btn}>
 				Pedir
 				</button>
 			</div>

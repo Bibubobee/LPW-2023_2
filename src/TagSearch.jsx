@@ -56,6 +56,7 @@ function TagSelection() {
               <button
                 className={`btn custom-button ${selectedTags.includes(tag) ? 'btn-primary' : 'btn-outline-primary'} px-5 mt-2`}
                 onClick={() => handleTagClick(tag)}
+				type="button"
               >
                 {tag}
               </button>
@@ -69,6 +70,7 @@ function TagSelection() {
           {selectedTags.map((tag) => (
             <button
               key={tag}
+			  type="button"
               className="custom-button btn btn-primary mt-2 me-2"
               onClick={() => handleTagClick(tag)}
             >
