@@ -38,7 +38,7 @@ function SearchPage() {
 		setContentVisible(true);
 		}, 100); // Adjust the delay as needed
 		return () => clearTimeout(timeout);
-	});
+	}, []);
 
 	return (
 		<div className={`custom-container  ${contentVisible ? 'loaded' : ''}`}>
