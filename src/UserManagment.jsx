@@ -1,6 +1,162 @@
-// import './Admin.css';
+
+import {useState, useEffect} from 'react';
+import axios from 'axios';
+
+const DelUser = async (id,setDeletionSuccess) => {
+  const query = `
+      mutation myMutation($id: ID!) {
+        deleteUsuario(id: $id){
+          message
+        }
+      }
+    `;
+     const response = await axios.post('http://localhost:8080/graphql', {
+      query,
+      variables: {
+        id: id
+      }
+    });
+    console.log("BORAO")
+
+    setDeletionSuccess(true);
+    return true;
+}
+const RegisterUser = async (nombre, pass, email, rut, telefono,setRegistrationSuccess) => {
+  const searchQuery = `
+    query myQuery {
+      getUsuarios {
+        rut
+      }
+    }
+  `;
+  try {
+    const searchResponse = await axios.post('http://localhost:8080/graphql', {
+      query: searchQuery
+    });
+    console.log(searchResponse.data.data.getUsuarios);
+    const existingUser = searchResponse.data.data.getUsuarios.find(
+      (user) => user.rut === rut
+    );
+
+    if (existingUser) {
+      console.log('User already exists:', existingUser);
+      setRegistrationSuccess(false);
+      return existingUser;
+    }
+    const registerQuery = `
+      mutation myMutation($input: UsuarioInput) {
+        addUsuario(input: $input) {
+          id
+          email
+          pass
+          nombre
+          rut
+          telefono
+          foto
+        }
+      }
+    `;
+    const registerResponse = await axios.post('http://localhost:8080/graphql', {
+      query: registerQuery,
+      variables: {
+        input: {
+          email: email,
+          pass: "password",
+          nombre: nombre,
+          rut: rut,
+          telefono: telefono,
+          foto: "/UserWithNoPFP.png",
+        }
+      }
+    });
+
+    const newUser = registerResponse.data.data.addUser;
+    // Handle the newly registered user (show a message, etc.)
+    console.log('User registered successfully:', newUser);
+    setRegistrationSuccess(true);
+    return newUser;
+  } catch (error) {
+    console.error('Error during user registration', error);
+    setRegistrationSuccess(false);
+    throw error;
+  }
+};
+
 
 function UserManagment() {
+
+    const [userData, setUserData] = useState([]);
+    const [registrationSuccess, setRegistrationSuccess] = useState(false);
+    const [deletionSuccess, setDeletionSuccess] = useState(false);
+    const [formData, setFormData] = useState({
+        id: '',
+        nombre: '',
+        pass: '',
+        email: '',
+        rut: '',
+        telefono: '',
+    });
+
+
+    const fetchData = async () => {
+        try {
+          const response = await axios.post('http://localhost:8080/graphql', {
+            query: `
+              query {
+                getUsuarios {
+                  id
+                  nombre
+                  email
+                  rut
+                  telefono
+                }
+              }
+            `,
+          });
+
+          setUserData(response.data.data.getUsuarios);
+        } catch (error) {
+          console.error('Error fetching user data', error);
+        }
+      };
+
+    useEffect(() => {
+      fetchData();
+    }, [registrationSuccess, deletionSuccess]);
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+            console.log("WDAJIEW")
+            setFormData({ ...formData, [name]: value });
+        };
+    const handleSubmit = async (e) => {
+        console.log("AAAAAAAAAAAAAAaa")
+        e.preventDefault();
+        try {
+          await RegisterUser(
+            formData.nombre,
+            formData.pass,
+            formData.email,
+            formData.rut,
+            formData.telefono,
+            setRegistrationSuccess
+          );
+        } catch (error) {
+        }
+    };
+    const handleDelSubmit = async (e) => {
+        console.log("AAAAAAAAAAAAAAaa")
+        e.preventDefault();
+        try {
+          await DelUser(
+            formData.id,
+            setDeletionSuccess
+          );
+        } catch (error) {
+        }
+    };
+
     return (
         <div class = "container">
             <div className="row mt-3">
@@ -22,7 +178,9 @@ function UserManagment() {
                     <table className="table table-striped table-hover table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col-md col-sm-1 d-flex justify-content-center">#</th>
+                                <th scope="col-md col-sm-1 d-flex justify-content-center">
+                                    ID Usuario
+                                </th>
                                 <th scope="col-md col-sm-2 d-flex justify-content-center">
                                     Nombre persona
                                 </th>
@@ -36,13 +194,15 @@ function UserManagment() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Pepe</td>
-                                <td>pepe@uncorreoreal.com</td>
-                                <td>12345678-9</td>
-                                <td>+569 12345678</td>
+                          {userData.map((user, index) => (
+                            <tr key={user.id}>
+                              <th scope="row">{user.id}</th>
+                              <td>{user.nombre}</td>
+                              <td>{user.email}</td>
+                              <td>{user.rut}</td>
+                              <td>{user.telefono}</td>
                             </tr>
+                          ))}
                         </tbody>
                     </table>
                 </div>
@@ -59,27 +219,56 @@ function UserManagment() {
                   <form>
                     <div className="mb-3">
                       <label className="form-label">Nombre persona</label>
-                      <input type="text" className="form-control"/>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="nombre"
+                        value={formData.nombre}
+                        onChange={handleChange}
+                      />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Correo Electronico</label>
-                      <input type="text" className="form-control"/>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                      />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Rut</label>
-                      <input type="text" className="form-control"/>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="rut"
+                        value={formData.rut}
+                        onChange={handleChange}
+                      />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Telefono</label>
-                      <input type="text" className="form-control"/>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="telefono"
+                        value={formData.telefono}
+                        onChange={handleChange}
+                      />
                     </div>
                   </form>
                 </div>
                 <div className="modal-footer">
+                  {registrationSuccess && (
+                    <p className="text-success">
+                      Usuario registrado exitosamente.
+                    </p>
+                  )}
                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                     Cerrar
                   </button>
-                  <button type="button" className="btn btn-primary">
+                  <button type="submit" className="btn btn-primary" onClick ={handleSubmit}>
                     Enviar
                   </button>
                 </div>
@@ -98,15 +287,26 @@ function UserManagment() {
                   <form>
                     <div className="mb-3">
                       <label className="form-label">Id Usuario</label>
-                      <input type="text" className="form-control"/>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="id"
+                        value={formData.id}
+                        onChange={handleChange}
+                      />
                     </div>
                   </form>
                 </div>
                 <div className="modal-footer">
+                  {deletionSuccess && (
+                    <p className="text-success">
+                      Usuario eliminado exitosamente.
+                    </p>
+                  )}
                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                     Cerrar
                   </button>
-                  <button type="button" className="btn btn-primary">
+                  <button type="button" className="btn btn-primary" onClick ={handleDelSubmit}>
                     Enviar
                   </button>
                 </div>
