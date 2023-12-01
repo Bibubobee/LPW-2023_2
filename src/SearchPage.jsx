@@ -31,10 +31,11 @@ function SearchPage() {
 	const [contentVisible, setContentVisible] = useState(false);
 	const [libros, setLibros] = useState([]);
 	const [searchValue, setSearchValue] = useState("");
+	const [searchGenre, setSearchGenre] = useState([]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		setSearchValue(document.getElementById("search_book").value);		
+		setSearchValue(document.getElementById("search_book").value);
 	}
 
 	useEffect(() => {
@@ -73,7 +74,7 @@ function SearchPage() {
 				<div className="row g-3 pt-3 pb-3">
 					<div className="col-6 col-md-6 col-lg-6">
 						<h5>Seleccionar Género</h5>
-						<TagSearch />
+						<TagSearch searchGenre={searchGenre} setSearchGenre={setSearchGenre}/>
 					</div>
 					<div className="col-6 col-md-6 col-lg-6 d-flex justify-content-end">
 						<button style={{ height: 60}} type="submit" className="btn btn-success">
