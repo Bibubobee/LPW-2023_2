@@ -6,7 +6,7 @@ const detallePrestamoSchema = new mongoose.Schema({
     en_casa : Boolean,
     direccion : String,
     fecha_devolucion : String,
-    ejemplar : { type : mongoose.Schema.Types.ObjectId, ref: 'Ejemplar'}
+    ejemplar : String
 });
 
 module.exports = mongoose.model("DetallePrestamo", detallePrestamoSchema);
