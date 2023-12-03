@@ -5,7 +5,7 @@ const detallePrestamoSchema = new mongoose.Schema({
     fecha_limite : String,
     en_casa : Boolean,
     direccion : String,
-    fecha_devolucion : Date,
+    fecha_devolucion : String,
     ejemplar : { type : mongoose.Schema.Types.ObjectId, ref: 'Ejemplar'}
 });
 
