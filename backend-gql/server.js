@@ -597,5 +597,5 @@ startServer();
 const app = express();
 app.use(cors());
 app.listen(8080, function(){
-  	console.log("server arria");
+  	console.log("Backend disponible");
 })
