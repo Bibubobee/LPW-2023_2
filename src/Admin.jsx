@@ -123,14 +123,16 @@ function Admin() {
                   // Verificar si 'detalles' es un array antes de intentar mapearlo
                   const detallesArray = Array.isArray(prestamo.detalles) ? prestamo.detalles : [];
                   console.log(prestamo, "a")
+                  const detallesConDevolucion = detallesArray.filter((detalle) => detalle.fecha_devolucion == "X-X-X");
+
                   // Mapear sobre 'detallesArray' en lugar de 'prestamo.detalles'
-                  return detallesArray.map((detalle) => (
+                  return detallesConDevolucion.map((detalle) => (
                     <tr key={detalle.id}>
                       <th scope="row">{detalle.id}</th>
                       <td>{detalle.usuario}</td>
                       <td>{detalle.libro}</td>
                       <td>{detalle.en_casa ? 'En Casa' : 'En Biblioteca'}</td>
-                      <td>{detalle.fecha_devolucion}</td>
+                      <td>{detalle.fecha_limite}</td>
                     </tr>
                   ));
                 })}

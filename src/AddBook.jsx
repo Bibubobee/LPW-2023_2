@@ -10,41 +10,59 @@ import TagSearch from './TagSearch';
 // foto: String!
 
 const RegisterBook = async (nombre, anno, autor, sinopsis, foto) => {
-    const query = `
-        mutation myMutation($input : LibroInput){
-            addLibro(input : $input){
-                id
-                nombre
-                anno
-                copias
-                autor
-                sinopsis
-                foto
-            }
+    const searchbook = `
+        query GetLibros {
+          getLibros {
+            autor
+            nombre
+          }
         }
     `;
+    const searchResponse = await axios.post('http://localhost:8080/graphql', {
+            query: searchbook,
+        });
+    console.log(searchResponse.data.data.getLibros)
+    const librosExisten = searchResponse.data.data.getLibros;
 
-    try{
-        const response = await axios.post('http://localhost:8080/graphql', {
-            query,
-            variables : {
-                input : {
-                    nombre: nombre,
-                    anno: parseInt(anno),
-                    copias: 1,
-                    autor: autor,
-                    sinopsis: sinopsis,
-                    foto: foto
+    // Verificar si el libro ya existe
+    if (!(librosExisten.some(libro => libro.nombre === nombre && libro.autor === autor))) {
+        const query = `
+            mutation myMutation($input : LibroInput){
+                addLibro(input : $input){
+                    id
+                    nombre
+                    anno
+                    copias
+                    autor
+                    sinopsis
+                    foto
                 }
             }
-        });
-        
-        return response.data;
-    } catch (error) {
-        console.error("Error al registrar el libro", error);
-        throw error;
+        `;
+
+        try{
+            const response = await axios.post('http://localhost:8080/graphql', {
+                query,
+                variables : {
+                    input : {
+                        nombre: nombre,
+                        anno: parseInt(anno),
+                        copias: 1,
+                        autor: autor,
+                        sinopsis: sinopsis,
+                        foto: foto
+                    }
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error al registrar el libro", error);
+            throw error;
+        }
+    }else{
+        return null
     }
-}
+}   
 
 const RegisterGenreBook = async (libro, genero) => {
     const query = `
@@ -94,7 +112,8 @@ function AddBook(){
             console.log("Genero del Libro registrado", resultGenre);
         }
 
-        alert("Libro registrado");
+        const message = result? "Libro registrado": "Este libro ya existe"
+        alert(message, result);
     }
 
     return (
