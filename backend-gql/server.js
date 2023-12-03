@@ -302,7 +302,7 @@ const resolvers = {
 			return compra;
 		},
 		async getPrestamos(obj){
-			const prestamos = await Prestamo.find();
+			const prestamos = await Prestamo.find().populate('usuario');
 			return prestamos;
 		},
 		async getDetalleCompras(obj, {idCompra}){
