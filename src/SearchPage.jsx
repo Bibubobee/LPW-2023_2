@@ -87,7 +87,7 @@ function SearchPage() {
 			<div className="row mt-5 d-flex justify-content-sm-center justify-content-lg-between">
 				{ 
 					filtered.map(libro => (
-					<BookProduct nombre={libro.nombre} autor={libro.autor} copias={libro.copias} foto={libro.foto}/>
+					<BookProduct id={libro.id} nombre={libro.nombre} autor={libro.autor} copias={libro.copias} foto={libro.foto}/>
 					))
 				}
 			</div>
