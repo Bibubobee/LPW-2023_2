@@ -91,18 +91,6 @@ function SearchPage() {
 					))
 				}
 			</div>
-			<div className="col-6 col-md-6 col-lg-6 d-flex justify-content-end">
-				<button style={{ height: 60}} type="submit" className="btn btn-success">
-				Buscar
-				</button>
-			</div>
-		</div>
-		<div className="row mt-5 d-flex justify-content-sm-center justify-content-lg-between">
-			{ 
-				libros.map(libro => (
-				<BookProduct id={libro.id} nombre={libro.nombre} autor={libro.autor} copias={libro.copias} foto={libro.foto}/>
-				))
-			}
 		</div>
 	</div>
 	);
