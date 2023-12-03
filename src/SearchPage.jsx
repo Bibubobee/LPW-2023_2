@@ -25,9 +25,18 @@ const getBooks = async () => {
 	}
 }
 
+
+
 function SearchPage() {
 	const [contentVisible, setContentVisible] = useState(false);
 	const [libros, setLibros] = useState([]);
+	const [searchValue, setSearchValue] = useState("");
+	const [searchGenre, setSearchGenre] = useState([]);
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setSearchValue(document.getElementById("search_book").value);
+	}
 
 	useEffect(() => {
 		getBooks()
@@ -40,38 +49,47 @@ function SearchPage() {
 		return () => clearTimeout(timeout);
 	}, []);
 
+	const filtered = libros.filter(
+        libro =>
+            libro.nombre.toLowerCase().indexOf(searchValue.toLowerCase()) > -1 || 
+            libro.autor.toLowerCase().indexOf(searchValue.toLowerCase()) > -1,
+	);
+
 	return (
 		<div className={`custom-container  ${contentVisible ? 'loaded' : ''}`}>
-		<div className="row g-3 pt-5">
-			<div className="col-12 mx-auto">
-			<div style={{ height: 80 }}>
-				<input
-				type="text"
-				className="form-control form-control-lg h-100"
-				placeholder="Nombre del Libro"
-				/>
-			</div>
-			</div>
-		</div>
+			<form onSubmit={(e) => handleSubmit(e)}>
+				<div className="row g-3 pt-5">
+					<div className="col-12 mx-auto">
+						<div style={{ height: 80 }}>
+							<input
+							id="search_book"
+							type="text"
+							className="form-control form-control-lg h-100"
+							placeholder="Nombre del Libro"
+							/>
+						</div>
+					</div>
+				</div>
 
-		<div className="row g-3 pt-3 pb-3">
-			<div className="col-6 col-md-6 col-lg-6">
-				<h5>Seleccionar Género</h5>
-				<TagSearch />
+				<div className="row g-3 pt-3 pb-3">
+					<div className="col-6 col-md-6 col-lg-6">
+						<h5>Seleccionar Género</h5>
+						<TagSearch searchGenre={searchGenre} setSearchGenre={setSearchGenre}/>
+					</div>
+					<div className="col-6 col-md-6 col-lg-6 d-flex justify-content-end">
+						<button style={{ height: 60}} type="submit" className="btn btn-success">
+						Buscar
+						</button>
+					</div>
+				</div>
+			</form>
+			<div className="row mt-5 d-flex justify-content-sm-center justify-content-lg-between">
+				{ 
+					filtered.map(libro => (
+					<BookProduct nombre={libro.nombre} autor={libro.autor} copias={libro.copias} foto={libro.foto}/>
+					))
+				}
 			</div>
-			<div className="col-6 col-md-6 col-lg-6 d-flex justify-content-end">
-				<button style={{ height: 60}} type="submit" className="btn btn-success">
-				Buscar
-				</button>
-			</div>
-		</div>
-		<div className="row mt-5 d-flex justify-content-sm-center justify-content-lg-between">
-			{ 
-				libros.map(libro => (
-				<BookProduct nombre={libro.nombre} autor={libro.autor} copias={libro.copias} foto={libro.foto}/>
-				))
-			}
-		</div>
 		</div>
 	);
 }

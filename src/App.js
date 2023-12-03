@@ -30,12 +30,6 @@ function App() {
               />
               <h3 style={{fontFamily: "Cursive"}}>BIBLIOTECA IGUANO</h3>
             </a>
-            <form className="d-flex">
-              <input className="form-control me-2" type="search" placeholder="Busca tu libro" aria-label="Search" />
-              <button className="btn btn-outline-success" type="submit" title='Buscar'>
-                <FaSearch/>
-              </button>
-            </form>
           </div>
         </nav>
       </header>
