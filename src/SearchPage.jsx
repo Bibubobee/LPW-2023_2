@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import TagSearch from './TagSearch';
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
+import { getValue } from "@testing-library/user-event/dist/utils";
 
 const getBooks = async () => {
 	const query = `
@@ -25,6 +26,30 @@ const getBooks = async () => {
 	}
 }
 
+const getGeneroLibros = async (libro) => {
+	const query = `
+		query myQuery ($idLibro: ID!) {
+			getLibroGeneros (idLibro: $idLibro ){
+				id
+				genero {
+					nombre
+				}
+			}
+		}
+	`;
+	try {
+		const response= await axios.post("http://localhost:8080/graphql", {
+			query,
+			variables : {
+				idLibro : libro.toString()
+			}
+		});
+		return response.data.data.getLibroGeneros;
+	} catch (error) {
+		console.error("Error al obtener generos del libro", error);
+		throw error;
+	}
+}
 
 
 function SearchPage() {
@@ -42,7 +67,14 @@ function SearchPage() {
 		getBooks()
 			.then(data => setLibros(data));
 		
-		console.log(contentVisible)
+		libros.forEach(libro => {
+			libro.generos = [];
+			getGeneroLibros(libro.id)
+				.then(genero => console.log(genero.nombre))
+		});
+		console.log(libros);
+		
+		console.log(contentVisible);
 		const timeout = setTimeout(() => {
 		setContentVisible(true);
 		}, 100); // Adjust the delay as needed
@@ -52,7 +84,10 @@ function SearchPage() {
 	const filtered = libros.filter(
         libro =>
             libro.nombre.toLowerCase().indexOf(searchValue.toLowerCase()) > -1 || 
-            libro.autor.toLowerCase().indexOf(searchValue.toLowerCase()) > -1,
+            libro.autor.toLowerCase().indexOf(searchValue.toLowerCase()) > -1 ||
+			libro.generos.some(genero => {
+				return searchGenre.includes(genero);
+			})
 	);
 
 	return (
@@ -75,7 +110,9 @@ function SearchPage() {
 				<div className="row g-3 pt-3 pb-3">
 					<div className="col-6 col-md-6 col-lg-6">
 						<h5>Seleccionar Género</h5>
-						<TagSearch searchGenre={searchGenre} setSearchGenre={setSearchGenre}/>
+						<TagSearch 
+						searchGenre={searchGenre} 
+						setSearchGenre={setSearchGenre}/>
 					</div>
 					<div className="col-6 col-md-6 col-lg-6 d-flex justify-content-end">
 						<button style={{ height: 60}} type="submit" className="custom-button btn btn-success">

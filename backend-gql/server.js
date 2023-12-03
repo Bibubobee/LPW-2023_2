@@ -277,7 +277,7 @@ const resolvers = {
 			const genero = await Genero.findById(id);
 			return genero;
 		},
-		async getLibroGeneros(idLibro){
+		async getLibroGeneros(obj, {idLibro}){
 			const libroGenero = await LibroGenero.find({ libro : idLibro}).populate('libro genero');
 			return libroGenero;
 		},

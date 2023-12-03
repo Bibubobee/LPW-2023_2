@@ -75,7 +75,7 @@ const RegisterUser = async (nombre, pass, email, rut, telefono, userType, setReg
       setRegistrationSuccess(false);
       return existingUser;
     }
-      //añadir weones
+      //añadir persona
     const registerQuery = `
       mutation myMutation($input: UsuarioInput) {
         addUsuario(input: $input) {
@@ -94,7 +94,7 @@ const RegisterUser = async (nombre, pass, email, rut, telefono, userType, setReg
       variables: {
         input: {
           email: email,
-          pass: "password",
+          pass: pass,
           nombre: nombre,
           rut: rut,
           telefono: telefono,
@@ -166,7 +166,7 @@ function UserManagment() {
         email: '',
         rut: '',
         telefono: '',
-        tipoUsuario: '' //{ User: 0, Librarian: 1, Admin: 2 };
+        tipoUsuario: '' 
     });
     const fetchData = async () => {
         try {
@@ -195,12 +195,14 @@ function UserManagment() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-            console.log("WDAJIEW")
             setFormData({ ...formData, [name]: value });
         };
     const handleSubmit = async (e) => {
-        console.log("AAAAAAAAAAAAAAaa")
         e.preventDefault();
+        if ([formData.nombre, formData.pass, formData.email, formData.rut, formData.telefono, formData.userType].includes('')) {
+          alert("No se pudo ingresar el usuario, quedan campos por rellenar.");
+          return;
+        }
         try {
           await RegisterUser(
             formData.nombre,
@@ -216,8 +218,11 @@ function UserManagment() {
         }
     };
     const handleDelSubmit = async (e) => {
-        console.log("AAAAAAAAAAAAAAaa")
         e.preventDefault();
+        if ([formData.id].includes('')) {
+          alert("No se pudo eliminar el usuario, quedan campos por rellenar.");
+          return;
+        }
         try {
           await DelUser(
             formData.id,
@@ -288,6 +293,7 @@ function UserManagment() {
                 </div>
                 <div className="modal-body">
                   <form>
+                    <div className='h6 text-danger'>*Todos los campos son obligatorios</div>
                     <div className="mb-3">
                       <label className="form-label">Nombre persona</label>
                       <input
@@ -295,6 +301,16 @@ function UserManagment() {
                         className="form-control"
                         name="nombre"
                         value={formData.nombre}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Contraseña</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="pass"
+                        value={formData.pass}
                         onChange={handleChange}
                       />
                     </div>
@@ -392,6 +408,7 @@ function UserManagment() {
                 </div>
                 <div className="modal-body">
                   <form>
+                    <div className='h6 text-danger'>*Todos los campos son obligatorios</div>
                     <div className="mb-3">
                       <label className="form-label">Id Usuario</label>
                       <input

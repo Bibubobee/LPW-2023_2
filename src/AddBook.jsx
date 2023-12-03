@@ -1,6 +1,7 @@
 import './AddBook.css'
 import {useState} from 'react';
 import axios from 'axios';
+import TagSearch from './TagSearch';
 // nombre: String!
 // año: Int!
 // copias: Int!
@@ -9,16 +10,65 @@ import axios from 'axios';
 // foto: String!
 
 const RegisterBook = async (nombre, anno, autor, sinopsis, foto) => {
+    const searchbook = `
+        query GetLibros {
+          getLibros {
+            autor
+            nombre
+          }
+        }
+    `;
+    const searchResponse = await axios.post('http://localhost:8080/graphql', {
+            query: searchbook,
+        });
+    console.log(searchResponse.data.data.getLibros)
+    const librosExisten = searchResponse.data.data.getLibros;
+
+    // Verificar si el libro ya existe
+    if (!(librosExisten.some(libro => libro.nombre === nombre && libro.autor === autor))) {
+        const query = `
+            mutation myMutation($input : LibroInput){
+                addLibro(input : $input){
+                    id
+                    nombre
+                    anno
+                    copias
+                    autor
+                    sinopsis
+                    foto
+                }
+            }
+        `;
+
+        try{
+            const response = await axios.post('http://localhost:8080/graphql', {
+                query,
+                variables : {
+                    input : {
+                        nombre: nombre,
+                        anno: parseInt(anno),
+                        copias: 1,
+                        autor: autor,
+                        sinopsis: sinopsis,
+                        foto: foto
+                    }
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error al registrar el libro", error);
+            throw error;
+        }
+    }else{
+        return null
+    }
+}   
+
+const RegisterGenreBook = async (libro, genero) => {
     const query = `
-        mutation myMutation($input : LibroInput){
-            addLibro(input : $input){
+        mutation myMutation($input : LibroGeneroInput){
+            addLibroGenero(input : $input){
                 id
-                nombre
-                anno
-                copias
-                autor
-                sinopsis
-                foto
             }
         }
     `;
@@ -28,18 +78,15 @@ const RegisterBook = async (nombre, anno, autor, sinopsis, foto) => {
             query,
             variables : {
                 input : {
-                    nombre: nombre,
-                    anno: parseInt(anno),
-                    copias: 1,
-                    autor: autor,
-                    sinopsis: sinopsis,
-                    foto: foto
+                    libro: libro.toString(),
+                    genero: genero.toString()
                 }
             }
         });
+        
         return response.data;
     } catch (error) {
-        console.error("Error al registrar el libro", error);
+        console.error("Error al registrar el genero del libro", error);
         throw error;
     }
 }
@@ -50,6 +97,7 @@ function AddBook(){
     const [autor, setAutor] = useState('');
     const [sinopsis, setSinopsis] = useState('');
     const [foto, setFoto] = useState('');
+    const [generos, setGeneros] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -57,9 +105,15 @@ function AddBook(){
             alert("No se pudo ingresar el libro, quedan campos por rellenar.");
             return;
         }
-
         const result = await RegisterBook(nombre, anno, autor, sinopsis, foto);
-        alert("Libro registrado", result);
+        const message = result? "Libro registrado": "Este libro ya existe"
+
+        for (let index = 0; index < generos.length; index++) {
+            const resultGenre = await RegisterGenreBook(result.data.addLibro.id, generos[index].id);
+            console.log("Genero del Libro registrado", resultGenre);
+        }
+
+        alert(message);
     }
 
     return (
@@ -106,13 +160,13 @@ function AddBook(){
                 </input>
             </div>
 
-            {/* <div>
+            <div className='mb-3'>
                 <label for='tags' className='form-label'>Género(s)</label>
                 <TagSearch 
                     id="tags"
-                    onChange={(e) => setGeneros(e.target.value)}
-                />
-            </div> */}
+                    searchGenre={generos} 
+                    setSearchGenre={setGeneros}/>
+            </div>
 
             <div>
                 <label for='sinopsis' className='form-label'>Sinopsis del libro</label>
