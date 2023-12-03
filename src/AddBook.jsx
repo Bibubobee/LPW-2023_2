@@ -106,14 +106,14 @@ function AddBook(){
             return;
         }
         const result = await RegisterBook(nombre, anno, autor, sinopsis, foto);
+        const message = result? "Libro registrado": "Este libro ya existe"
 
         for (let index = 0; index < generos.length; index++) {
             const resultGenre = await RegisterGenreBook(result.data.addLibro.id, generos[index].id);
             console.log("Genero del Libro registrado", resultGenre);
         }
 
-        const message = result? "Libro registrado": "Este libro ya existe"
-        alert(message, result);
+        alert(message);
     }
 
     return (
