@@ -109,7 +109,7 @@ const typeDefs = gql`
 		en_casa: Boolean!
 		direccion: String
 		fecha_devolucion: String!
-		ejemplar: Ejemplar
+		ejemplar: String
 	}
 	type Alert{
 		message:String
