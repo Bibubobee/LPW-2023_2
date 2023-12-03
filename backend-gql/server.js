@@ -411,7 +411,7 @@ const resolvers = {
 			return libro;
 		},
 		async updateLibro(obj, {id, input}){
-			const libro = await Libro.findByIdAndUpdate(id, input);
+			const libro = await Libro.findByIdAndUpdate(id, input, { new: true });
 			return libro;
 		},
 		async deleteLibro(obj, {id}){
