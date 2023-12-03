@@ -7,13 +7,13 @@ function Admin() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       const getPrestamos = `
         query GetPrestamos {
           getPrestamos {
             id
-            usuario{
+            usuario {
               rut
             }
           }
@@ -29,7 +29,6 @@ useEffect(() => {
         );
 
         const prestamosData = response.data.data.getPrestamos;
-        console.log(prestamosData)
 
         const detallesPromises = prestamosData.map(async (prestamo) => {
           const responseDetalles = await axios.post(
@@ -38,6 +37,7 @@ useEffect(() => {
               query: `
                 query GetDetallePrestamos($idPrestamo: ID!) {
                   getDetallePrestamos(idPrestamo: $idPrestamo) {
+                    id
                     en_casa
                     fecha_limite
                     ejemplar
@@ -50,20 +50,46 @@ useEffect(() => {
               },
             }
           );
-          if(responseDetalles!= null){
-            return responseDetalles.data.data.getDetallePrestamos;
-          }
+
+          const detalles = responseDetalles.data.data.getDetallePrestamos.map(async (detalle) => {
+            const responseEjemplar = await axios.post(
+              'http://localhost:8080/graphql',
+              {
+                query: `
+                  query GetEjemplar($getEjemplarId: ID!) {
+                    getEjemplar(id: $getEjemplarId) {
+                      libro {
+                        nombre
+                      }
+                    }
+                  }
+                `,
+                variables: {
+                  "getEjemplarId": detalle.ejemplar,
+                },
+              }
+            );
+
+            return {
+              id: detalle.id,
+              en_casa: detalle.en_casa,
+              fecha_limite: detalle.fecha_limite,
+              fecha_devolucion: detalle.fecha_devolucion,
+              usuario: response.data.data.getPrestamos[0].usuario.rut,
+              libro: responseEjemplar.data.data.getEjemplar.libro.nombre
+            };
+          });
+          return Promise.all(detalles);
         });
 
         const detalles = await Promise.all(detallesPromises);
-        // Combinar los detalles con los préstamos
+        const flattenedDetalles = detalles.flat();
         const prestamosConDetalles = prestamosData.map((prestamo, index) => ({
           ...prestamo,
-          detalles: detalles[index],
+          detalles: Array.isArray(flattenedDetalles[index])? flattenedDetalles[index] : [flattenedDetalles[index]],
         }));
-        console.log(detalles)
-        
-        setPrestamos(prestamosData);
+
+        setPrestamos(prestamosConDetalles);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -73,7 +99,6 @@ useEffect(() => {
 
     fetchData();
   }, []);
-
 
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -87,26 +112,29 @@ useEffect(() => {
               <thead>
                 <tr>
                   <th scope="col-md col-sm-2 d-flex justify-content-center">ID</th>
-                  <th scope="col-md col-sm-2 d-flex justify-content-center">Nombre Persona</th>
+                  <th scope="col-md col-sm-2 d-flex justify-content-center">Rut Persona</th>
                   <th scope="col-md col-sm-2 d-flex justify-content-center">Nombre Libro</th>
                   <th scope="col-md col-sm-2 d-flex justify-content-center">Tipo Prestamo</th>
                   <th scope="col-md col-sm-2 d-flex justify-content-center">Tiempo Restante</th>
                 </tr>
               </thead>
               <tbody>
-                {prestamos.map((prestamo) => (
-                  if(prestamo.detalles){
-                  prestamo.detalles.map((detalle) => (
+                {prestamos.map((prestamo) => {
+                  // Verificar si 'detalles' es un array antes de intentar mapearlo
+                  const detallesArray = Array.isArray(prestamo.detalles) ? prestamo.detalles : [];
+                  console.log(prestamo, "a")
+                  // Mapear sobre 'detallesArray' en lugar de 'prestamo.detalles'
+                  return detallesArray.map((detalle) => (
                     <tr key={detalle.id}>
                       <th scope="row">{detalle.id}</th>
-                      <td>{prestamo.usuario.nombre}</td>
-                      <td>{detalle.ejemplar.libro.nombre}</td>
+                      <td>{detalle.usuario}</td>
+                      <td>{detalle.libro}</td>
                       <td>{detalle.en_casa ? 'En Casa' : 'En Biblioteca'}</td>
                       <td>{detalle.fecha_devolucion}</td>
                     </tr>
-                  ))
-                  }
-                ))}
+                  ));
+                })}
+
               </tbody>
             </table>
           </div>
@@ -115,5 +143,4 @@ useEffect(() => {
     </div>
   );
 }
-
 export default Admin;
