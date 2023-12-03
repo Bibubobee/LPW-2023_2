@@ -56,6 +56,7 @@ function SearchPage() {
 	);
 
 	return (
+	<div>
 		<div className={`custom-container  ${contentVisible ? 'loaded' : ''}`}>
 			<form onSubmit={(e) => handleSubmit(e)}>
 				<div className="row g-3 pt-5">
@@ -90,16 +91,29 @@ function SearchPage() {
 					))
 				}
 			</div>
+			<div className="col-6 col-md-6 col-lg-6 d-flex justify-content-end">
+				<button style={{ height: 60}} type="submit" className="btn btn-success">
+				Buscar
+				</button>
+			</div>
 		</div>
+		<div className="row mt-5 d-flex justify-content-sm-center justify-content-lg-between">
+			{ 
+				libros.map(libro => (
+				<BookProduct id={libro.id} nombre={libro.nombre} autor={libro.autor} copias={libro.copias} foto={libro.foto}/>
+				))
+			}
+		</div>
+	</div>
 	);
 }
 
-function BookProduct( {nombre, autor, copias, foto} ) {
+function BookProduct( {id, nombre, autor, copias, foto} ) {
 	const enable_btn = copias === 0;
 	
 	return (
 		<div className="col-lg-3 col-md-4 col-sm-6 mt-5" style={{width: "250px", height: "400px"}}>
-		<a className="card card-sm" href={"/PaginaLibro#" + nombre} style={{ textDecoration: "none" }} title={nombre}>
+		<a className="card card-sm" href={"/PaginaLibro#" + id} style={{ textDecoration: "none" }} title={nombre}>
 			<div className="text-center pb-3 pt-3">
 			<img src={foto + ".jpg"} className="card-image-top img-shadow" width="60%" height="auto" alt="" />
 			</div>
