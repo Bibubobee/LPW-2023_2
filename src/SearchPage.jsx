@@ -26,11 +26,11 @@ const getBooks = async () => {
 	}
 }
 
+// Se intentó hacer que buscaras libros por genero, pero no resultó
 const getGeneroLibros = async (libro) => {
 	const query = `
 		query myQuery ($idLibro: ID!) {
 			getLibroGeneros (idLibro: $idLibro ){
-				id
 				genero {
 					nombre
 				}
@@ -67,13 +67,6 @@ function SearchPage() {
 		getBooks()
 			.then(data => setLibros(data));
 		
-		libros.forEach(libro => {
-			libro.generos = [];
-			getGeneroLibros(libro.id)
-				.then(genero => console.log(genero.nombre))
-		});
-		console.log(libros);
-		
 		console.log(contentVisible);
 		const timeout = setTimeout(() => {
 		setContentVisible(true);
@@ -81,13 +74,11 @@ function SearchPage() {
 		return () => clearTimeout(timeout);
 	}, []);
 
+
 	const filtered = libros.filter(
         libro =>
             libro.nombre.toLowerCase().indexOf(searchValue.toLowerCase()) > -1 || 
-            libro.autor.toLowerCase().indexOf(searchValue.toLowerCase()) > -1 ||
-			libro.generos.some(genero => {
-				return searchGenre.includes(genero);
-			})
+            libro.autor.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
 	);
 
 	return (
