@@ -233,12 +233,12 @@ function UserManagment() {
             <div className="row mt-3">
               <div className="row">
                 <div className="col-6 col-md-2 mb-3 mb-md-0">
-                  <button className="btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#AddUser">
+                  <button className="custom-button btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#AddUser">
                     Agregar Usuario
                   </button>
                 </div>
                 <div className="col-6 col-md-2 offset-md-8">
-                  <button className="btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#DelUser">
+                  <button className="custom-button btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#DelUser">
                     Eliminar Usuario
                   </button>
                 </div>

@@ -96,7 +96,7 @@ function TagSelection(props) {
           {selectedTags.map((tag) => (
             <button
               key={tag}
-			  type="button"
+      			  type="button"
               className="custom-button btn btn-primary mt-2 me-2"
               onClick={() => handleTagClick(tag)}
             >

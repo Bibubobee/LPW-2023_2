@@ -17,6 +17,7 @@
     "graphql": "^16.8.1",
     "graphql-server-express": "^1.4.1",
     "graphql-tools": "^9.0.0",
+    "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongoose": "^7.6.3",
     "yarn": "^1.22.21"

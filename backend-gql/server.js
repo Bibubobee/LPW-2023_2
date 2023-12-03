@@ -22,8 +22,21 @@ const DetalleCompra = require("./models/detalleCompra");
 const DetallePrestamo = require("./models/detallePrestamo");
 const { ObjectId } = require("mongodb");
 const detalleCompra = require("./models/detalleCompra");
+const jwt = require('jsonwebtoken');
 
 mongoose.connect("mongodb+srv://admin:admin1234@cluster0.1qndxpt.mongodb.net/Iguano",{useNewUrlParser: true,useUnifiedTopology:true});
+
+
+const generateAccessToken = (user) => {
+	const secret = 'contrasenna ultrasecreta que nadie adivinaria porque eso es de mala gente y no quise colocar una variable de entorno :c';
+	const expiresIn = '10m';
+
+	const payload = {
+    	userId: user.id,
+  	};
+
+ 	return jwt.sign(payload, secret, { expiresIn });
+};
 
 const typeDefs = gql`
 	type Usuario{
@@ -34,6 +47,12 @@ const typeDefs = gql`
 		rut: String!
 		telefono: String!
 		foto: String!
+	}
+	type Autenticacion{
+		success: Boolean!
+		token : String
+		usuario : Usuario
+		message : String
 	}
 	type Perfil{
 		id: ID!
@@ -102,6 +121,10 @@ const typeDefs = gql`
 		rut: String!
 		telefono: String!
 		foto: String!
+	}
+	input AutenticacionInput{
+		email : String!
+		pass : String!
 	}
 	input PerfilInput{
 		tipo: String!
@@ -178,6 +201,7 @@ const typeDefs = gql`
 		addUsuario(input: UsuarioInput) : Usuario
 		updateUsuario(id: ID!, input: UsuarioInput) : Usuario
 		deleteUsuario(id: ID!) : Alert
+		autenticarUsuario(input: AutenticacionInput) : Autenticacion
 		addPerfil(input: PerfilInput) : Perfil
 		updatePerfil(id: ID!, input: PerfilInput) : Perfil
 		deletePerfil(id: ID!) : Alert
@@ -313,6 +337,31 @@ const resolvers = {
 			return {
 				message: "usuario eliminado",
 			};
+		},
+		async autenticarUsuario (obj, {id, input}){
+			try {
+				const { email, pass } = input;
+				const usuario = await Usuario.findOne({ email });
+				if (usuario && usuario.pass == pass) {
+				 	const token = generateAccessToken(usuario);
+				  	return {
+				    	success: true,
+				    	token,
+				    	usuario,
+				  	};
+				} else {
+				  	return {
+				    	success: false,
+				    	message: 'Correo o contraseña incorrectos',
+				  	};
+				}
+			} catch (message) {
+				console.log('Error durante la autenticación:', message);
+				return {
+				  success: false,
+				  message: 'Error durante la autenticación',
+				};
+			}
 		},
 		async addPerfil(obj, {input}){
 			const perfil = new Perfil(input);

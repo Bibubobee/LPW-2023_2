@@ -1,4 +1,9 @@
 /* App.css */
+.custom-button {
+    background-color: #352f44 !important;
+    border-color: #352f44 !important;
+    color: white !important; 
+}
 .custom-navbar {
   background-color: #5C5470;
   transform: translateX(-20px);

@@ -21,3 +21,10 @@ code {
 .custom-container.loaded {
   opacity: 1;
 }
+.custom-button {
+    background-color: #352f44 !important;
+    border-color: #352f44 !important;
+    color: white !important; 
+    text-align: center;
+    
+}

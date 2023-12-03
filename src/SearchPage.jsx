@@ -77,7 +77,7 @@ function SearchPage() {
 						<TagSearch searchGenre={searchGenre} setSearchGenre={setSearchGenre}/>
 					</div>
 					<div className="col-6 col-md-6 col-lg-6 d-flex justify-content-end">
-						<button style={{ height: 60}} type="submit" className="btn btn-success">
+						<button style={{ height: 60}} type="submit" className="custom-button btn btn-success">
 						Buscar
 						</button>
 					</div>
@@ -107,7 +107,7 @@ function BookProduct( {nombre, autor, copias, foto} ) {
 			<h5 className="text-center card-title fw-bold">{nombre}</h5>
 			<h6 className="text-center">{autor}</h6>
 			<div className="d-flex justify-content-center">
-				<button type="submit" className="btn btn-success" disabled={enable_btn}>
+				<button type="submit" className="custom-button-card btn btn-success" disabled={enable_btn}>
 				Pedir
 				</button>
 			</div>
