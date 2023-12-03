@@ -286,11 +286,11 @@ const resolvers = {
 			return libroGenero;
 		},
 		async getEjemplares(obj){
-			const ejemplares = await Ejemplar.find();
+			const ejemplares = await Ejemplar.find().populate('libro');
 			return ejemplares;
 		},
 		async getEjemplar(obj, {id}){
-			const ejemplar = await Ejemplar.findById(id);
+			const ejemplar = await Ejemplar.findById(id).populate('libro');
 			return ejemplar;
 		},
 		async getCompras(obj){
