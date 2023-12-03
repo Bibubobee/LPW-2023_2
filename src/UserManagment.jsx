@@ -75,7 +75,7 @@ const RegisterUser = async (nombre, pass, email, rut, telefono, userType, setReg
       setRegistrationSuccess(false);
       return existingUser;
     }
-      //añadir weones
+      //añadir persona
     const registerQuery = `
       mutation myMutation($input: UsuarioInput) {
         addUsuario(input: $input) {

@@ -80,8 +80,8 @@ function TagSelection(props) {
           {filteredTags.map((tag) => (
             <li key={tag.nombre} className="text-center">
               <button
-                className={`btn custom-button ${selectedTags.includes(tag.nombre) ? 'btn-primary' : 'btn-outline-primary'} px-5 mt-2`}
-                onClick={() => handleTagClick(tag.nombre)}
+                className={`btn custom-button ${selectedTags.includes(tag) ? 'btn-primary' : 'btn-outline-primary'} px-5 mt-2`}
+                onClick={() => handleTagClick(tag)}
 				type="button"
               >
                 {tag.nombre}
@@ -95,12 +95,12 @@ function TagSelection(props) {
         <div className="selected-tags">
           {selectedTags.map((tag) => (
             <button
-              key={tag}
+              key={tag.nombre}
       			  type="button"
               className="custom-button btn btn-primary mt-2 me-2"
               onClick={() => handleTagClick(tag)}
             >
-              {tag}
+              {tag.nombre}
             </button>
           ))}
         </div>
