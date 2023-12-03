@@ -108,7 +108,7 @@ const typeDefs = gql`
 		fecha_limite: String!
 		en_casa: Boolean!
 		direccion: String
-		fecha_devolucio: String!
+		fecha_devolucion: String!
 		ejemplar: Ejemplar
 	}
 	type Alert{
@@ -170,7 +170,7 @@ const typeDefs = gql`
 		fecha_limite: String!
 		en_casa: Boolean!
 		direccion: String
-		fecha_devolucio: String!
+		fecha_devolucion: String!
 		ejemplar: String!
 	}
 	type Query{
@@ -511,7 +511,9 @@ const resolvers = {
 			let compraBus = await Compra.findById(input.compra);
 			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
 			if (compraBus != null && ejemplarBus != null){
-				const detalleCompra = new DetalleCompra({ compra: compraBus._id, ejemplar: ejemplarBus._id});
+				const detalleCompra = new DetalleCompra({ 
+					compra: compraBus._id, 
+					ejemplar: ejemplarBus._id});
 				await detalleCompra.save();
 				return detalleCompra;
 			} else {
@@ -538,7 +540,14 @@ const resolvers = {
 			let prestamoBus = await Prestamo.findById(input.prestamo);
 			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
 			if (prestamoBus != null && ejemplarBus != null){
-				const detallePrestamo = new DetallePrestamo({ prestamo: prestamoBus._id, ejemplar: ejemplarBus._id});
+				const detallePrestamo = new DetallePrestamo({ 
+					fecha_pedido: input.fecha_pedido,
+					fecha_limite: input.fecha_limite,
+					en_casa: input.en_casa,
+					direccion: input.direccion,
+					fecha_devolucion: input.fecha_devolucion,
+					prestamo: prestamoBus._id, 
+					ejemplar: ejemplarBus._id});
 				await detallePrestamo.save();
 				return detallePrestamo;
 			} else {
@@ -549,7 +558,14 @@ const resolvers = {
 			let prestamoBus = await Prestamo.findById(input.prestamo);
 			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
 			if (prestamoBus != null && ejemplarBus != null){
-				const detallePrestamo = await DetallePrestamo.findByIdAndUpdate(id, { compra: prestamoBus._id, ejemplar: ejemplarBus._id});
+				const detallePrestamo = new DetallePrestamo({ 
+					fecha_pedido: input.fecha_pedido,
+					fecha_limite: input.fecha_limite,
+					en_casa: input.en_casa,
+					direccion: input.direccion,
+					fecha_devolucion: input.fecha_devolucion,
+					prestamo: prestamoBus._id, 
+					ejemplar: ejemplarBus._id});
 				return detallePrestamo;
 			} else {
 				return null;
