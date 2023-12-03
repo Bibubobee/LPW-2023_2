@@ -194,9 +194,7 @@ function AddBook(){
                 >
                 </input>
             </div>
-            {/* <div className='text-right'> */}
-                <button type="submit" className='custom-button btn btn-primary float-end btn-lg mb-5'>Agregar Libro</button>
-            {/* </div> */}
+            <button type="submit" className='custom-button btn btn-primary float-end btn-lg mb-5'>Agregar Libro</button>
         </form>
     )
 }

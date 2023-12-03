@@ -99,18 +99,16 @@ function SearchPage() {
 				</div>
 
 				<div className="row g-3 pt-3 pb-3">
-					<div className="col-6 col-md-6 col-lg-6">
+					{/* <div className="col-6 col-md-6 col-lg-6">
 						<h5>Seleccionar Género</h5>
 						<TagSearch 
 						searchGenre={searchGenre} 
 						setSearchGenre={setSearchGenre}/>
-					</div>
-					<div className="col-6 col-md-6 col-lg-6 d-flex justify-content-end">
-						<button style={{ height: 60}} type="submit" className="custom-button btn btn-success">
-						Buscar
-						</button>
-					</div>
+					</div> */}
 				</div>
+				<button style={{ height: 60}} type="submit" className="custom-button btn btn-success float-end">
+						Buscar
+				</button>
 			</form>
 			<div className="row mt-5 d-flex justify-content-sm-center justify-content-lg-between">
 				{ 
