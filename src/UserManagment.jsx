@@ -2,7 +2,35 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 
-const DelUser = async (id,setDeletionSuccess) => {
+
+const DelUser = async (id,setDeletionSuccess,fetchData) => {
+  const searchUserProfileQuery = `
+    query GetUsuarioPerfiles($idUsuario: ID!) {
+      getUsuarioPerfiles(idUsuario: $idUsuario) {
+        id
+      }
+    }
+  `;
+  const searchUserProfileResponse = await axios.post('http://localhost:8080/graphql', {
+    query:searchUserProfileQuery,
+    variables: {
+      idUsuario: id
+    }
+  });
+
+  const deleteUsuarioPerfil = `
+    mutation DeleteUsuarioPerfil($deleteUsuarioPerfilId: ID!) {
+      deleteUsuarioPerfil(id: $deleteUsuarioPerfilId) {
+        message
+      }
+    }
+  `;
+  const addProfileResponse = await axios.post('http://localhost:8080/graphql', {
+    query: deleteUsuarioPerfil,
+    variables: {
+      "deleteUsuarioPerfilId": searchUserProfileResponse.data.data.getUsuarioPerfiles[0].id
+    }
+  });
   const query = `
       mutation myMutation($id: ID!) {
         deleteUsuario(id: $id){
@@ -10,26 +38,30 @@ const DelUser = async (id,setDeletionSuccess) => {
         }
       }
     `;
-     const response = await axios.post('http://localhost:8080/graphql', {
-      query,
-      variables: {
-        id: id
-      }
-    });
-    console.log("BORAO")
-
-    setDeletionSuccess(true);
-    return true;
-}
-const RegisterUser = async (nombre, pass, email, rut, telefono,setRegistrationSuccess) => {
-  const searchQuery = `
-    query myQuery {
-      getUsuarios {
-        rut
-      }
+   const response = await axios.post('http://localhost:8080/graphql', {
+    query,
+    variables: {
+      id: id
     }
-  `;
+  });
+  console.log("BORAO")
+
+  setDeletionSuccess(true);
+  fetchData();
+  return true;
+
+}
+const RegisterUser = async (nombre, pass, email, rut, telefono, userType, setRegistrationSuccess,fetchData) => {
   try {
+    //tbala usuario
+      //busqueda
+    const searchQuery = `
+      query myQuery {
+        getUsuarios {
+          rut
+        }
+      }
+    `;
     const searchResponse = await axios.post('http://localhost:8080/graphql', {
       query: searchQuery
     });
@@ -43,6 +75,7 @@ const RegisterUser = async (nombre, pass, email, rut, telefono,setRegistrationSu
       setRegistrationSuccess(false);
       return existingUser;
     }
+      //añadir weones
     const registerQuery = `
       mutation myMutation($input: UsuarioInput) {
         addUsuario(input: $input) {
@@ -69,22 +102,60 @@ const RegisterUser = async (nombre, pass, email, rut, telefono,setRegistrationSu
         }
       }
     });
+    const newUser = registerResponse.data.data.addUsuario;
+    console.log(newUser)
+    //perfiles
+      //buscar id de perfil
+    const searchProfileQuery = `
+      query myQuery {
+        getPerfiles {
+          id
+          tipo
+        }
+      }
+    `;
+    const searchProfileResponse = await axios.post('http://localhost:8080/graphql', {
+      query:searchProfileQuery
+    });
+    console.log(searchProfileResponse.data.data.getPerfiles)
+    console.log(userType)
+    const foundProfile = searchProfileResponse.data.data.getPerfiles.find(
+      (usuarioPerfil) => usuarioPerfil.tipo === userType,
+    );
 
-    const newUser = registerResponse.data.data.addUser;
-    // Handle the newly registered user (show a message, etc.)
+      //añadir a usuarioperfil
+    const AddProfileQuery = `
+      mutation myMutation($input: UsuarioPerfilInput) {
+        addUsuarioPerfil(input: $input) {
+          id
+        }
+      }
+    `;
+    const addProfileResponse = await axios.post('http://localhost:8080/graphql', {
+      query: AddProfileQuery,
+      variables: {
+        input: {
+          usuario: newUser.id.toString(),
+          perfil: foundProfile.id.toString()
+        }
+      }
+    });
+
+
     console.log('User registered successfully:', newUser);
     setRegistrationSuccess(true);
+    fetchData();
     return newUser;
   } catch (error) {
     console.error('Error during user registration', error);
     setRegistrationSuccess(false);
+    fetchData();
     throw error;
   }
 };
 
 
 function UserManagment() {
-
     const [userData, setUserData] = useState([]);
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [deletionSuccess, setDeletionSuccess] = useState(false);
@@ -95,9 +166,8 @@ function UserManagment() {
         email: '',
         rut: '',
         telefono: '',
+        tipoUsuario: '' //{ User: 0, Librarian: 1, Admin: 2 };
     });
-
-
     const fetchData = async () => {
         try {
           const response = await axios.post('http://localhost:8080/graphql', {
@@ -113,16 +183,14 @@ function UserManagment() {
               }
             `,
           });
-
-          setUserData(response.data.data.getUsuarios);
+        setUserData(response.data.data.getUsuarios);
         } catch (error) {
           console.error('Error fetching user data', error);
         }
       };
-
     useEffect(() => {
       fetchData();
-    }, [registrationSuccess, deletionSuccess]);
+    }, []);
 
 
     const handleChange = (e) => {
@@ -140,7 +208,9 @@ function UserManagment() {
             formData.email,
             formData.rut,
             formData.telefono,
-            setRegistrationSuccess
+            formData.userType,
+            setRegistrationSuccess,
+            fetchData
           );
         } catch (error) {
         }
@@ -151,7 +221,8 @@ function UserManagment() {
         try {
           await DelUser(
             formData.id,
-            setDeletionSuccess
+            setDeletionSuccess,
+            fetchData
           );
         } catch (error) {
         }
@@ -162,12 +233,12 @@ function UserManagment() {
             <div className="row mt-3">
               <div className="row">
                 <div className="col-6 col-md-2 mb-3 mb-md-0">
-                  <button className="btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#AddUser">
+                  <button className="custom-button btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#AddUser">
                     Agregar Usuario
                   </button>
                 </div>
                 <div className="col-6 col-md-2 offset-md-8">
-                  <button className="btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#DelUser">
+                  <button className="custom-button btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#DelUser">
                     Eliminar Usuario
                   </button>
                 </div>
@@ -256,6 +327,42 @@ function UserManagment() {
                         value={formData.telefono}
                         onChange={handleChange}
                       />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Tipo de Usuario</label>
+                      <div className="form-check">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          name="userType"
+                          value="usuario"
+                          checked={formData.userType === 'usuario'}
+                          onChange={handleChange}
+                        />
+                        <label className="form-check-label">Usuario</label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          name="userType"
+                          value="bibliotecario"
+                          checked={formData.userType === 'bibliotecario'}
+                          onChange={handleChange}
+                        />
+                        <label className="form-check-label">Bibliotecario</label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          name="userType"
+                          value="admin"
+                          checked={formData.userType === 'admin'}
+                          onChange={handleChange}
+                        />
+                        <label className="form-check-label">Admin</label>
+                      </div>
                     </div>
                   </form>
                 </div>

@@ -2,3 +2,11 @@
     min-height: 90vh;
     position: relative;
 }
+
+.custom-button {
+    background-color: #352f44 !important;
+    border-color: #352f44 !important;
+    color: white !important; 
+    text-align: center;
+    
+}

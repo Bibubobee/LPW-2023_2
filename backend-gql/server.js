@@ -22,8 +22,21 @@ const DetalleCompra = require("./models/detalleCompra");
 const DetallePrestamo = require("./models/detallePrestamo");
 const { ObjectId } = require("mongodb");
 const detalleCompra = require("./models/detalleCompra");
+const jwt = require('jsonwebtoken');
 
 mongoose.connect("mongodb+srv://admin:admin1234@cluster0.1qndxpt.mongodb.net/Iguano",{useNewUrlParser: true,useUnifiedTopology:true});
+
+
+const generateAccessToken = (user) => {
+	const secret = 'contrasenna ultrasecreta que nadie adivinaria porque eso es de mala gente y no quise colocar una variable de entorno :c';
+	const expiresIn = '10m';
+
+	const payload = {
+    	userId: user.id,
+  	};
+
+ 	return jwt.sign(payload, secret, { expiresIn });
+};
 
 const typeDefs = gql`
 	type Usuario{
@@ -34,6 +47,12 @@ const typeDefs = gql`
 		rut: String!
 		telefono: String!
 		foto: String!
+	}
+	type Autenticacion{
+		success: Boolean!
+		token : String
+		usuario : Usuario
+		message : String
 	}
 	type Perfil{
 		id: ID!
@@ -89,7 +108,7 @@ const typeDefs = gql`
 		fecha_limite: String!
 		en_casa: Boolean!
 		direccion: String
-		fecha_devolucio: String!
+		fecha_devolucion: String!
 		ejemplar: Ejemplar
 	}
 	type Alert{
@@ -102,6 +121,10 @@ const typeDefs = gql`
 		rut: String!
 		telefono: String!
 		foto: String!
+	}
+	input AutenticacionInput{
+		email : String!
+		pass : String!
 	}
 	input PerfilInput{
 		tipo: String!
@@ -147,7 +170,7 @@ const typeDefs = gql`
 		fecha_limite: String!
 		en_casa: Boolean!
 		direccion: String
-		fecha_devolucio: String!
+		fecha_devolucion: String!
 		ejemplar: String!
 	}
 	type Query{
@@ -178,6 +201,7 @@ const typeDefs = gql`
 		addUsuario(input: UsuarioInput) : Usuario
 		updateUsuario(id: ID!, input: UsuarioInput) : Usuario
 		deleteUsuario(id: ID!) : Alert
+		autenticarUsuario(input: AutenticacionInput) : Autenticacion
 		addPerfil(input: PerfilInput) : Perfil
 		updatePerfil(id: ID!, input: PerfilInput) : Perfil
 		deletePerfil(id: ID!) : Alert
@@ -262,11 +286,11 @@ const resolvers = {
 			return libroGenero;
 		},
 		async getEjemplares(obj){
-			const ejemplares = await Ejemplar.find();
+			const ejemplares = await Ejemplar.find().populate('libro');
 			return ejemplares;
 		},
 		async getEjemplar(obj, {id}){
-			const ejemplar = await Ejemplar.findById(id);
+			const ejemplar = await Ejemplar.findById(id).populate('libro');
 			return ejemplar;
 		},
 		async getCompras(obj){
@@ -278,7 +302,7 @@ const resolvers = {
 			return compra;
 		},
 		async getPrestamos(obj){
-			const prestamos = await Prestamo.find();
+			const prestamos = await Prestamo.find().populate('usuario');
 			return prestamos;
 		},
 		async getDetalleCompras(obj, {idCompra}){
@@ -313,6 +337,31 @@ const resolvers = {
 			return {
 				message: "usuario eliminado",
 			};
+		},
+		async autenticarUsuario (obj, {id, input}){
+			try {
+				const { email, pass } = input;
+				const usuario = await Usuario.findOne({ email });
+				if (usuario && usuario.pass == pass) {
+				 	const token = generateAccessToken(usuario);
+				  	return {
+				    	success: true,
+				    	token,
+				    	usuario,
+				  	};
+				} else {
+				  	return {
+				    	success: false,
+				    	message: 'Correo o contraseña incorrectos',
+				  	};
+				}
+			} catch (message) {
+				console.log('Error durante la autenticación:', message);
+				return {
+				  success: false,
+				  message: 'Error durante la autenticación',
+				};
+			}
 		},
 		async addPerfil(obj, {input}){
 			const perfil = new Perfil(input);
@@ -462,7 +511,9 @@ const resolvers = {
 			let compraBus = await Compra.findById(input.compra);
 			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
 			if (compraBus != null && ejemplarBus != null){
-				const detalleCompra = new DetalleCompra({ compra: compraBus._id, ejemplar: ejemplarBus._id});
+				const detalleCompra = new DetalleCompra({ 
+					compra: compraBus._id, 
+					ejemplar: ejemplarBus._id});
 				await detalleCompra.save();
 				return detalleCompra;
 			} else {
@@ -489,7 +540,14 @@ const resolvers = {
 			let prestamoBus = await Prestamo.findById(input.prestamo);
 			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
 			if (prestamoBus != null && ejemplarBus != null){
-				const detallePrestamo = new DetallePrestamo({ prestamo: prestamoBus._id, ejemplar: ejemplarBus._id});
+				const detallePrestamo = new DetallePrestamo({ 
+					fecha_pedido: input.fecha_pedido,
+					fecha_limite: input.fecha_limite,
+					en_casa: input.en_casa,
+					direccion: input.direccion,
+					fecha_devolucion: input.fecha_devolucion,
+					prestamo: prestamoBus._id, 
+					ejemplar: ejemplarBus._id});
 				await detallePrestamo.save();
 				return detallePrestamo;
 			} else {
@@ -500,7 +558,14 @@ const resolvers = {
 			let prestamoBus = await Prestamo.findById(input.prestamo);
 			let ejemplarBus = await Ejemplar.findById(input.ejemplar);
 			if (prestamoBus != null && ejemplarBus != null){
-				const detallePrestamo = await DetallePrestamo.findByIdAndUpdate(id, { compra: prestamoBus._id, ejemplar: ejemplarBus._id});
+				const detallePrestamo = new DetallePrestamo({ 
+					fecha_pedido: input.fecha_pedido,
+					fecha_limite: input.fecha_limite,
+					en_casa: input.en_casa,
+					direccion: input.direccion,
+					fecha_devolucion: input.fecha_devolucion,
+					prestamo: prestamoBus._id, 
+					ejemplar: ejemplarBus._id});
 				return detallePrestamo;
 			} else {
 				return null;
@@ -532,5 +597,5 @@ startServer();
 const app = express();
 app.use(cors());
 app.listen(8080, function(){
-  	console.log("server arria");
+  	console.log("Backend disponible");
 })

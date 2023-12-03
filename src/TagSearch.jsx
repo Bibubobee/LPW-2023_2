@@ -1,12 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './TagSearch.css';
+import axios from "axios";
 
-function TagSelection() {
-  const [selectedTags, setSelectedTags] = useState([]);
+const getGenres = async () => {
+  const query = `
+		query myQuery {
+			getGeneros{
+				id
+				nombre
+			}
+		}
+	`;
+	try {
+		const response = await axios.post("http://localhost:8080/graphql", {query});
+		return response.data.data.getGeneros;
+	} catch (error) {
+		console.error("Error al obtener generos", error);
+		throw error;
+	}
+}
+
+function TagSelection(props) {
+  const selectedTags = props.searchGenre;
+  const setSelectedTags = props.setSearchGenre;
   const [searchText, setSearchText] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const allTags = ['Etiqueta 1', 'Etiqueta 2', 'Etiqueta 3', 'Etiqueta 4', 'Etiqueta 5'];
+  const [generos, setGeneros] = useState([]);
+
+  useEffect(() => {
+		getGenres()
+			.then(data => setGeneros(data));
+		
+	}, []);
 
   const handleTagClick = (tag) => {
     if (selectedTags.includes(tag)) {
@@ -22,8 +48,8 @@ function TagSelection() {
     setShowDropdown(true);
   };
 
-  const filteredTags = allTags.filter((tag) =>
-    tag.toLowerCase().includes(searchText.toLowerCase())
+  const filteredTags = generos.filter((tag) =>
+    tag.nombre.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
@@ -36,7 +62,7 @@ function TagSelection() {
           data-bs-toggle="dropdown"
           aria-expanded={showDropdown}
         >
-          Tags
+          Géneros
         </button>
         <ul
           className={`dropdown-menu ${showDropdown ? 'show' : ''} custom-dropdown-menu dropup`}
@@ -52,13 +78,13 @@ function TagSelection() {
             />
           </li>
           {filteredTags.map((tag) => (
-            <li key={tag} className="text-center">
+            <li key={tag.nombre} className="text-center">
               <button
-                className={`btn custom-button ${selectedTags.includes(tag) ? 'btn-primary' : 'btn-outline-primary'} px-5 mt-2`}
-                onClick={() => handleTagClick(tag)}
+                className={`btn custom-button ${selectedTags.includes(tag.nombre) ? 'btn-primary' : 'btn-outline-primary'} px-5 mt-2`}
+                onClick={() => handleTagClick(tag.nombre)}
 				type="button"
               >
-                {tag}
+                {tag.nombre}
               </button>
             </li>
           ))}
@@ -70,7 +96,7 @@ function TagSelection() {
           {selectedTags.map((tag) => (
             <button
               key={tag}
-			  type="button"
+      			  type="button"
               className="custom-button btn btn-primary mt-2 me-2"
               onClick={() => handleTagClick(tag)}
             >

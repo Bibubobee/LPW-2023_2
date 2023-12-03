@@ -1,11 +1,11 @@
 const mongoose = require("mongoose")
 const detallePrestamoSchema = new mongoose.Schema({
     prestamo : { type : mongoose.Schema.Types.ObjectId, ref: 'Prestamo'},
-    fecha_pedido : Date,
-    fecha_limite : Date,
+    fecha_pedido : String,
+    fecha_limite : String,
     en_casa : Boolean,
     direccion : String,
-    fecha_devolucion : Date,
+    fecha_devolucion : String,
     ejemplar : { type : mongoose.Schema.Types.ObjectId, ref: 'Ejemplar'}
 });
 

@@ -1,19 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import { useAuth } from './AuthContext';
 import './App.css';
 
 function App() {
+  const { state, dispatch } = useAuth();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [navbarVisible, setNavbarVisible] = useState(false);
-
   const [logoVisible, setLogoVisible] = useState(false);
+
   useEffect(() => {
     setTimeout(() => {
       setNavbarVisible(true);
-    }, 100); // Adjust the delay as needed
-     setTimeout(() => {
+    }, 100); // Ajusta el retardo según sea necesario
+    setTimeout(() => {
       setLogoVisible(true);
-    }, 500); // Adjust the delay as needed for the logo
+    }, 500); // Ajusta el retardo según sea necesario para el logo
   }, []);
+
+  useEffect(() => {
+    setIsLoggedIn(state.isAuthenticated);
+  }, [state]);
+
+  const handleLogin = () => {
+    if (isLoggedIn && state.user  != null) {
+      dispatch({ type: 'LOGOUT' });
+      window.location.href = '/';
+    } else {
+      window.location.href = '/Login';
+    }
+  };
 
   return (
     <div className="SearchPage">
@@ -28,14 +44,11 @@ function App() {
                 height="100"
                 className={`logo-custom ${logoVisible ? 'loaded' : ''}`}
               />
-              <h3 style={{fontFamily: "Cursive"}}>BIBLIOTECA IGUANO</h3>
+              <h3 style={{ fontFamily: "Cursive" }}>BIBLIOTECA IGUANO</h3>
             </a>
-            <form className="d-flex">
-              <input className="form-control me-2" type="search" placeholder="Busca tu libro" aria-label="Search" />
-              <button className="btn btn-outline-success" type="submit" title='Buscar'>
-                <FaSearch/>
-              </button>
-            </form>
+            <button type="button" className="custom-button btn btn-primary" onClick={handleLogin}>
+              {isLoggedIn && state.user != null? 'Logout' : 'Login'}
+            </button>
           </div>
         </nav>
       </header>
