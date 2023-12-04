@@ -339,9 +339,9 @@ const resolvers = {
 			return detallePrestamo;
 		},
 		async getSolicitudes(obj){
-			const solicitudes = await Solicitud.find();
+			const solicitudes = await Solicitud.find().populate('usuario').populate('libro');
 			return solicitudes;
-		},
+		  },
 		async getSolicitud(obj, {id}){
 			const solicitud = await Solicitud.findById(id);
 			return solicitud;
