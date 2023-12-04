@@ -1,0 +1,178 @@
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import { FaAngleDown } from 'react-icons/fa';
+import './PaginaLibro.css';
+
+const getBookDetails = async (id) => {
+	const query = `
+		query myQuery {
+			getLibro(id: "${id}") {
+				id
+				nombre
+				foto
+				autor
+				copias
+        sinopsis
+        anno
+			}
+		}
+	`;
+	try {
+		const response = await axios.post("http://localhost:8080/graphql", {query});
+		return response.data.data.getLibro;
+	} catch (error) {
+		console.error("Error al obtener detalles del libro", error);
+		throw error;
+	}
+}
+
+const getBookGenre = async (id) => {
+	const query = `
+		query {
+			getLibroGeneros(idLibro: "${id}") {
+				genero {
+					id
+					nombre
+				}
+			}
+		}
+	`;
+	try {
+		const response = await axios.post("http://localhost:8080/graphql", {query});
+		return response.data.data.getLibroGeneros;
+	} catch (error) {
+		console.error("Error al obtener género del libro", error);
+		throw error;
+	}
+}
+
+let usuarioId = null;
+const authState = JSON.parse(localStorage.getItem('authState'));
+
+if (authState && authState.user) {
+  usuarioId = authState.user.id;
+}
+
+const handleButtonClick = async (usuarioId, libroId) => {
+  const mutation = `
+    mutation ($input: SolicitudInput) {
+      addSolicitud(input: $input) {
+        id
+      }
+    }
+  `;
+
+  const input = {
+    usuario: usuarioId,
+    libro: libroId,
+  };
+
+  try {
+    await axios.post('http://localhost:8080/graphql', {
+      query: mutation,
+      variables: { input },
+    });
+    alert('Solicitud creada con éxito!');
+  } catch (error) {
+    console.error('Error al crear la solicitud', error);
+  }
+};
+
+function PaginaLibroUsuario() {
+  const [openSinopsis, setOpenSinopsis] = useState(false);
+  const [openDetalle, setOpenDetalle] = useState(false);
+  const [libro, setLibro] = useState(null);
+  const [genero, setGenero] = useState(null);
+
+  useEffect(() => {
+    // Obtén el id del libro de la URL y elimina el carácter '#'
+    const id = window.location.hash.substring(1);
+    getBookDetails(id)
+      .then(data => {
+        // Aquí puedes usar los detalles del libro para actualizar el estado de tu componente
+        setLibro(data);
+      });
+    getBookGenre(id)
+      .then(data => {
+        // Aquí puedes usar el género del libro para actualizar el estado de tu componente
+        if (data && data.length > 0) {
+          setGenero(data[0].genero.nombre);  // Aquí se obtiene el nombre del género
+        } else {
+          setGenero('No hay género asociado');  // Aquí se establece un valor por defecto en caso de que el libro no tenga un género asociado
+        }
+      });
+  }, []);
+
+  if (!libro || !genero) {
+    return <div>Cargando...</div>;
+  }
+
+  return (
+    <div className="PaginaLibro">
+      <main>
+        <div className="container">
+          <div className="row px-4 my-5">
+            <div className="col-sm-12 col-md-6 col-lg-7 mb-4">
+              <img
+                src={libro.foto + ".jpg"}
+                className="img-fluid rounded"
+                width="350"
+                alt="Book Cover"
+              />
+            </div>
+            <div className="col-sm-12 col-md-6 col-lg-5">
+              <h1 className="fw-light">{libro.nombre}</h1>
+              <div onClick={() => setOpenSinopsis(!openSinopsis)} aria-controls="example-collapse-text" aria-expanded={openSinopsis} className="my-3" style={{cursor: 'pointer', borderTop: '1px solid #000', borderBottom: '1px solid #000', padding: '10px 0'}}>
+                <div className="row align-items-center">
+                  <div className="col-10 col-sm-11">
+                    <p style={{fontWeight: 'bold', marginBottom: '0'}}>Reseña</p>
+                  </div>
+                  <div className="col-2 col-sm-1">
+                    <FaAngleDown />
+                  </div>
+                </div>
+                {openSinopsis && 
+                  <div id="example-collapse-text">
+                    {libro.sinopsis}
+                  </div>
+                }
+              </div>
+              <div onClick={() => setOpenDetalle(!openDetalle)} aria-controls="example-collapse-text" aria-expanded={openDetalle} className="my-3" style={{cursor: 'pointer', borderBottom: '1px solid #000', padding: '10px 0'}}>
+                <div className="row align-items-center">
+                  <div className="col-10 col-sm-11">
+                    <p style={{fontWeight: 'bold', marginBottom: '0'}}>Detalle</p>
+                  </div>
+                  <div className="col-2 col-sm-1">
+                    <FaAngleDown />
+                  </div>
+                </div>
+                {openDetalle && 
+                  <div id="example-collapse-text">
+                    <p className="my-3">
+                      Autor: {libro.autor}
+                    </p>
+                    <p className="my-3">
+                      Año de publicación: {libro.anno}
+                    </p>
+                    <p className="my-3">
+                      Genero: {genero}
+                    </p>
+                    <p className="my-3">
+                      Copias disponibles: {libro.copias}
+                    </p>
+                  </div>
+                }
+              </div>
+              
+              <div className="d-grid gap-2">
+              <button className="btn btn-primary btn-lg" onClick={() => handleButtonClick(usuarioId, libro.id)}>Pedir en Mesa</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default PaginaLibroUsuario;
