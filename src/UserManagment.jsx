@@ -391,7 +391,7 @@ function UserManagment() {
                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                     Cerrar
                   </button>
-                  <button type="submit" className="btn btn-primary" onClick ={handleSubmit}>
+                  <button type="submit" className="custom-button btn btn-primary" onClick ={handleSubmit}>
                     Enviar
                   </button>
                 </div>
@@ -430,7 +430,7 @@ function UserManagment() {
                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                     Cerrar
                   </button>
-                  <button type="button" className="btn btn-primary" onClick ={handleDelSubmit}>
+                  <button type="button" className="custom-button btn btn-primary" onClick ={handleDelSubmit}>
                     Enviar
                   </button>
                 </div>

@@ -134,7 +134,7 @@ function PaginaLibro() {
               </div>
               
               <div className="d-grid gap-2">
-                <a href={"/Login#" + libro.id} className="btn btn-primary btn-lg">Pedir en Mesa</a>
+                <a href={"/Login#" + libro.id} className="custom-button btn btn-primary btn-lg">Pedir en Mesa</a>
               </div>
             </div>
           </div>

@@ -78,17 +78,17 @@ function AdminBookview() {
       </div>
       <div className="row px-4 my-5 justify-content-center">
         <div className="col-12 col-md-3 mb-3 mb-md-0 d-grid gap-2">
-          <button className="btn btn-primary btn-md w-100" data-bs-toggle="modal" data-bs-target="#addcopy">
+          <button className="custom-button btn btn-primary btn-md w-100" data-bs-toggle="modal" data-bs-target="#addcopy">
             Agregar ejemplares 
           </button>
         </div>
         <div className="col-12 col-md-3 mb-3 mb-md-0 d-grid gap-2">
-          <button className="btn btn-primary btn-md w-100" data-bs-toggle="modal" data-bs-target="#askforcopy">
+          <button className="custom-button btn btn-primary btn-md w-100" data-bs-toggle="modal" data-bs-target="#askforcopy">
             Pedir ejemplares a bodega
           </button>
         </div>
         <div className="col-12 col-md-3 d-grid gap-2">
-          <button className="btn btn-primary btn-md w-100" data-bs-toggle="modal" data-bs-target="#delcopy">
+          <button className="custom-button btn btn-primary btn-md w-100" data-bs-toggle="modal" data-bs-target="#delcopy">
             Eliminar ejemplares
           </button>
         </div>
@@ -114,8 +114,8 @@ function AdminBookview() {
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                 Cerrar
               </button>
-              <button type="button" className="btn btn-primary">
-                Guardar Cambios
+              <button type="button" className="custom-button btn btn-primary">
+                Enviar
               </button>
             </div>
           </div>
@@ -142,8 +142,8 @@ function AdminBookview() {
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                 Cerrar
               </button>
-              <button type="button" className="btn btn-primary">
-                Guardar Cambios
+              <button type="button" className="custom-button btn btn-primary">
+                Enviar
               </button>
             </div>
           </div>
@@ -170,8 +170,8 @@ function AdminBookview() {
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                 Cerrar
               </button>
-              <button type="button" className="btn btn-primary">
-                Guardar Cambios
+              <button type="button" className="custom-button btn btn-primary">
+                Enviar
               </button>
             </div>
           </div>

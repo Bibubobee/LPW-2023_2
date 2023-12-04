@@ -170,7 +170,7 @@ function BiblioBookview() {
                 }
               </div>
               <div className="d-grid gap-2">
-                <button className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#BookEdit">
+                <button className="custom-button btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#BookEdit">
                   Editar Información
                 </button>
               </div>
@@ -207,7 +207,7 @@ function BiblioBookview() {
             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
               Cerrar
             </button>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="custom-button btn btn-primary">
               Guardar Cambios
             </button>
           </div>

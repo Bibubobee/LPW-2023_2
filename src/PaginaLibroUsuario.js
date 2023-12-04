@@ -165,7 +165,7 @@ function PaginaLibroUsuario() {
               </div>
               
               <div className="d-grid gap-2">
-              <button className="btn btn-primary btn-lg" onClick={() => handleButtonClick(usuarioId, libro.id)}>Pedir en Mesa</button>
+              <button className="custom-button btn btn-primary btn-lg" onClick={() => handleButtonClick(usuarioId, libro.id)}>Pedir en Mesa</button>
               </div>
             </div>
           </div>

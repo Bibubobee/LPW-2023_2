@@ -158,7 +158,7 @@ return (
           </div>
         </div>
         */}
-        <div className="row mt-3">
+        <div className="row mt-3" style={{ backgroundColor: "#d8d2dd",padding: "10px"}}>
           <div className="col-6 d-flex justify-content-start">
             {SpecialButton1}
           </div>
