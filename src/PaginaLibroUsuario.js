@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from "axios";
 import { FaAngleDown } from 'react-icons/fa';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
-import "./BiblioBookview.css";
+import './PaginaLibro.css';
 
 const getBookDetails = async (id) => {
 	const query = `
@@ -47,28 +46,39 @@ const getBookGenre = async (id) => {
 	}
 }
 
-const updateBookDetails = async (id, input) => {
+let usuarioId = null;
+const authState = JSON.parse(localStorage.getItem('authState'));
+
+if (authState && authState.user) {
+  usuarioId = authState.user.id;
+}
+
+const handleButtonClick = async (usuarioId, libroId) => {
   const mutation = `
-    mutation myMutation {
-      updateLibro(id: "${id}", input: ${JSON.stringify(input).replace(/\"([^(\")"]+)\":/g, '$1:')}) {
+    mutation ($input: SolicitudInput) {
+      addSolicitud(input: $input) {
         id
-        nombre
-        sinopsis
-        anno
-        autor
       }
     }
   `;
-  try {
-    const response = await axios.post("http://localhost:8080/graphql", {query: mutation});
-    return response.data.data.updateLibro;
-  } catch (error) {
-    console.error("Error al actualizar detalles del libro", error);
-    throw error;
-  }
-}
 
-function BiblioBookview() {
+  const input = {
+    usuario: usuarioId,
+    libro: libroId,
+  };
+
+  try {
+    await axios.post('http://localhost:8080/graphql', {
+      query: mutation,
+      variables: { input },
+    });
+    alert('Solicitud creada con éxito!');
+  } catch (error) {
+    console.error('Error al crear la solicitud', error);
+  }
+};
+
+function PaginaLibroUsuario() {
   const [openSinopsis, setOpenSinopsis] = useState(false);
   const [openDetalle, setOpenDetalle] = useState(false);
   const [libro, setLibro] = useState(null);
@@ -96,42 +106,26 @@ function BiblioBookview() {
   if (!libro || !genero) {
     return <div>Cargando...</div>;
   }
-  
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const nombre = form.elements['nombre'].value;
-    const sinopsis = form.elements['sinopsis'].value;
-    const anno = parseInt(form.elements['anno'].value);
-    const autor = form.elements['autor'].value;
-    const foto = libro.foto; // Asumiendo que la foto no cambia
-    const copias = libro.copias; // Asumiendo que el número de copias no cambia
-  
-    const input = { nombre, sinopsis, anno, autor, foto, copias };
-  
-    updateBookDetails(libro.id, input)
-      .then(updatedLibro => {
-        setLibro(updatedLibro);
-      });
-  };
-  
 
-    return (
+  return (
+    <div className="PaginaLibro">
+      <main>
         <div className="container">
           <div className="row px-4 my-5">
-            <div className="col-sm-7">
-              <img src={libro.foto + ".jpg"}
-                className="img-fluid rounded" 
-                alt="Book Cover" 
-                width={350}  
+            <div className="col-sm-12 col-md-6 col-lg-7 mb-4">
+              <img
+                src={libro.foto + ".jpg"}
+                className="img-fluid rounded"
+                width="350"
+                alt="Book Cover"
               />
             </div>
-            <div className="col-sm-5">
-            <h1 className="fw-light">{libro.nombre}</h1>
+            <div className="col-sm-12 col-md-6 col-lg-5">
+              <h1 className="fw-light">{libro.nombre}</h1>
               <div onClick={() => setOpenSinopsis(!openSinopsis)} aria-controls="example-collapse-text" aria-expanded={openSinopsis} className="my-3" style={{cursor: 'pointer', borderTop: '1px solid #000', borderBottom: '1px solid #000', padding: '10px 0'}}>
                 <div className="row align-items-center">
                   <div className="col-10 col-sm-11">
-                    <p style={{fontWeight: 'bold', marginBottom: '0'}}>Rese&ntilde;a</p>
+                    <p style={{fontWeight: 'bold', marginBottom: '0'}}>Reseña</p>
                   </div>
                   <div className="col-2 col-sm-1">
                     <FaAngleDown />
@@ -158,67 +152,27 @@ function BiblioBookview() {
                       Autor: {libro.autor}
                     </p>
                     <p className="my-3">
-                      Año de Publicación: {libro.anno}
+                      Año de publicación: {libro.anno}
                     </p>
                     <p className="my-3">
                       Genero: {genero}
                     </p>
                     <p className="my-3">
-                      Copias Disponibles: {libro.copias}
+                      Copias disponibles: {libro.copias}
                     </p>
                   </div>
                 }
               </div>
+              
               <div className="d-grid gap-2">
-                <button className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#BookEdit">
-                  Editar Información
-                </button>
+              <button className="btn btn-primary btn-lg" onClick={() => handleButtonClick(usuarioId, libro.id)}>Pedir en Mesa</button>
               </div>
             </div>
           </div>
-
-          <div className="modal fade" tabIndex="-1" id = "BookEdit">
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Editar Información del Libro</h5>
-            <button
-              type="button" className="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div className="modal-body">
-            <form onSubmit={handleFormSubmit}>
-              <div className="mb-3">
-                <label className="form-label">Título</label>
-                <input type="text" className="form-control" name="nombre" defaultValue={libro.nombre}/>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Sinopsis</label>
-                <input type="text" className="form-control" name="sinopsis" defaultValue={libro.sinopsis}/>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Año de Publicación</label>
-                <input type="text" className="form-control" name="anno" defaultValue={libro.anno}/>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Autor</label>
-                <input type="text" className="form-control" name="autor" defaultValue={libro.autor}/>
-              </div>
-              <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-              Cerrar
-            </button>
-            <button type="submit" className="btn btn-primary">
-              Guardar Cambios
-            </button>
-          </div>
-            </form>
-          </div>
-          
         </div>
-      </div>
+      </main>
     </div>
-        </div>
   );
 }
 
-export default BiblioBookview;
+export default PaginaLibroUsuario;

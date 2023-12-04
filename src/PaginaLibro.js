@@ -26,10 +26,32 @@ const getBookDetails = async (id) => {
 	}
 }
 
+const getBookGenre = async (id) => {
+	const query = `
+		query {
+			getLibroGeneros(idLibro: "${id}") {
+				genero {
+					id
+					nombre
+				}
+			}
+		}
+	`;
+	try {
+		const response = await axios.post("http://localhost:8080/graphql", {query});
+		return response.data.data.getLibroGeneros;
+	} catch (error) {
+		console.error("Error al obtener género del libro", error);
+		throw error;
+	}
+}
+
+
 function PaginaLibro() {
   const [openSinopsis, setOpenSinopsis] = useState(false);
   const [openDetalle, setOpenDetalle] = useState(false);
   const [libro, setLibro] = useState(null);
+  const [genero, setGenero] = useState(null);
 
   useEffect(() => {
     // Obtén el id del libro de la URL y elimina el carácter '#'
@@ -39,9 +61,18 @@ function PaginaLibro() {
         // Aquí puedes usar los detalles del libro para actualizar el estado de tu componente
         setLibro(data);
       });
+    getBookGenre(id)
+      .then(data => {
+        // Aquí puedes usar el género del libro para actualizar el estado de tu componente
+        if (data && data.length > 0) {
+          setGenero(data[0].genero.nombre);  // Aquí se obtiene el nombre del género
+        } else {
+          setGenero('No hay género asociado');  // Aquí se establece un valor por defecto en caso de que el libro no tenga un género asociado
+        }
+      });
   }, []);
 
-  if (!libro) {
+  if (!libro || !genero) {
     return <div>Cargando...</div>;
   }
 
@@ -91,6 +122,9 @@ function PaginaLibro() {
                     </p>
                     <p className="my-3">
                       Año de publicación: {libro.anno}
+                    </p>
+                    <p className="my-3">
+                      Genero: {genero}
                     </p>
                     <p className="my-3">
                       Copias disponibles: {libro.copias}

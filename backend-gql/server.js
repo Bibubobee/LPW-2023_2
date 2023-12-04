@@ -20,6 +20,7 @@ const Compra = require("./models/compra");
 const Prestamo = require("./models/prestamo");
 const DetalleCompra = require("./models/detalleCompra");
 const DetallePrestamo = require("./models/detallePrestamo");
+const Solicitud = require("./models/solicitud");
 const { ObjectId } = require("mongodb");
 const detalleCompra = require("./models/detalleCompra");
 const jwt = require('jsonwebtoken');
@@ -114,6 +115,12 @@ const typeDefs = gql`
 	type Alert{
 		message:String
 	}
+	type Solicitud {
+		id: ID!
+		usuario: Usuario
+		libro: Libro
+		estado: String
+	}
 	input UsuarioInput{
 		email: String!
 		pass: String!
@@ -173,6 +180,11 @@ const typeDefs = gql`
 		fecha_devolucion: String!
 		ejemplar: String!
 	}
+	input SolicitudInput {
+		usuario: String!
+		libro: String!
+		estado: String
+	}
 	type Query{
 		getUsuarios : [Usuario]
 		getUsuario(id: ID!) : Usuario
@@ -196,6 +208,8 @@ const typeDefs = gql`
 		getDetalleCompra(idCompra: ID!, idEjemplar: ID!) : DetalleCompra
 		getDetallePrestamos(idPrestamo: ID!) : [DetallePrestamo]
 		getDetallePrestamo(idPrestamo: ID!, idEjemplar: ID!) : DetallePrestamo
+		getSolicitudes: [Solicitud]
+  		getSolicitud(id: ID!): Solicitud
 	}
 	type Mutation{
 		addUsuario(input: UsuarioInput) : Usuario
@@ -232,6 +246,9 @@ const typeDefs = gql`
 		addDetallePrestamo(input: DetallePrestamoInput) : DetallePrestamo
 		updateDetallePrestamo(id: ID!, input: DetallePrestamoInput) : DetallePrestamo
 		deleteDetallePrestamo(id: ID!) : Alert
+		addSolicitud(input: SolicitudInput): Solicitud
+  		updateSolicitud(id: ID!, input: SolicitudInput): Solicitud
+  		deleteSolicitud(id: ID!): Alert
 	}
 `;
 
@@ -320,6 +337,14 @@ const resolvers = {
 		async getDetallePrestamo(obj, {idPrestamo, idEjemplar}) {
 			const detallePrestamo = await DetallePrestamo.find({ prestamo : idPrestamo, ejemplar : idEjemplar}).populate('prestamo ejemplar');
 			return detallePrestamo;
+		},
+		async getSolicitudes(obj){
+			const solicitudes = await Solicitud.find();
+			return solicitudes;
+		},
+		async getSolicitud(obj, {id}){
+			const solicitud = await Solicitud.findById(id);
+			return solicitud;
 		},
 	},
 	Mutation:{
@@ -575,6 +600,21 @@ const resolvers = {
 			await DetallePrestamo.deleteOne({_id: id});
 			return {
 				message: "Detalle Prestamo eliminado",
+			};
+		},
+		async addSolicitud(obj, {input}){
+			const solicitud = new Solicitud(input);
+			await solicitud.save();
+			return solicitud;
+		},
+		async updateSolicitud(obj, {id, input}){
+			const solicitud = await Solicitud.findByIdAndUpdate(id, input);
+			return solicitud;
+		},
+		async deleteSolicitud(obj, {id}){
+			await  Solicitud.deleteOne({_id: id});
+			return {
+				message: "solicitud eliminado",
 			};
 		},
 	}

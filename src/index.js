@@ -8,6 +8,7 @@ import Admin from './Admin';
 import SearchPage from './SearchPage';
 import App from './App';
 import PaginaLibro from './PaginaLibro';
+import PaginaLibroUsuario from './PaginaLibroUsuario';
 import Historial from './Historial';
 import Login from './Login';
 import BiblioBookview from './BiblioBookview';
@@ -87,7 +88,7 @@ function SelectorComponent() {
   if (curr_state === stateEnum.User) {
     route1 = <Route path="/" element={<SearchPage />} />;
     route2 = <Route path="/Login" element={<Login />} />;
-    route3 = <Route path="/PaginaLibro" element={<PaginaLibro />} />;
+    route3 = <Route path="/PaginaLibro" element={<PaginaLibroUsuario />} />;
   } else if (curr_state === stateEnum.Librarian) {
     route1 = <Route path="/" element={<SearchPage />} />;
     route2 = <Route path="/Historial" element={<Historial />} />;
