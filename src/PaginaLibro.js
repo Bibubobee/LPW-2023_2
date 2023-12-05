@@ -66,11 +66,12 @@ function PaginaLibro() {
         // Aquí puedes usar el género del libro para actualizar el estado de tu componente
         if (data && data.length > 0) {
           let generoStr = "";
+          console.log(data);
           for (let i = 0; i < data.length; i++) {
             const genero = data[i]
-            generoStr += genero.genero.nombre
+            generoStr = `${generoStr}${genero.genero.nombre}`
             if (i !== data.length - 1){
-              generoStr += ", "
+              generoStr = `${generoStr}, `
             } 
           }
           setGenero(generoStr);  // Aquí se obtiene el nombre del género
