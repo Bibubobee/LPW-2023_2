@@ -51,7 +51,7 @@ function PaginaLibro() {
   const [openSinopsis, setOpenSinopsis] = useState(false);
   const [openDetalle, setOpenDetalle] = useState(false);
   const [libro, setLibro] = useState(null);
-  const [genero, setGenero] = useState(null);
+  const [genero, setGenero] = useState("");
 
   useEffect(() => {
     // Obtén el id del libro de la URL y elimina el carácter '#'
@@ -65,7 +65,15 @@ function PaginaLibro() {
       .then(data => {
         // Aquí puedes usar el género del libro para actualizar el estado de tu componente
         if (data && data.length > 0) {
-          setGenero(data[0].genero.nombre);  // Aquí se obtiene el nombre del género
+          let generoStr = "";
+          for (let i = 0; i < data.length; i++) {
+            const genero = data[i]
+            generoStr += genero.genero.nombre
+            if (i !== data.length - 1){
+              generoStr += ", "
+            } 
+          }
+          setGenero(generoStr);  // Aquí se obtiene el nombre del género
         } else {
           setGenero('No hay género asociado');  // Aquí se establece un valor por defecto en caso de que el libro no tenga un género asociado
         }
